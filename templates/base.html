@@ -1,0 +1,143 @@
+{% load static %}
+
+<!doctype html>
+<html lang="en">
+  <head>
+    {% block meta %}
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">  <!-- allow support for older internet explorer versions, eliminate errors when validating HTML -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="">
+        <meta name="keywords" content="">
+    {% endblock %}
+
+    {% block extra_meta %}
+    {% endblock %}
+
+    {% block corecss %}
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <link rel="stylesheet" href="{% static 'css/base_css.css' %}">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap" rel="stylesheet">
+        <link href="//cdn-images.mailchimp.com/embedcode/classic-10_7_dtp.css" rel="stylesheet" type="text/css">
+    {% endblock %}
+
+    {% block extra_css %}
+    {% endblock %}
+
+    {% block corejs %}
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+        <script src="https://kit.fontawesome.com/e98ebe1726.js" crossorigin="anonymous"></script>
+    {% endblock %}
+
+    {% block extra_js %}
+    {% endblock %}
+
+    <title>REAP {% block extra_title %}{% endblock %}</title>
+  </head>
+  <body class="d-flex flex-column h-100">
+    <header>
+        <nav class="navbar navbar-expand-md fixed-top">
+            <a class="navbar-brand" href="{% url 'frontend:index' %}">Home</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="text-white"><i class="fas fa-bars"></i></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="xmlDropdown" role="button"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Create XML files
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="xmlDropdown">
+                            <a class="dropdown-item" href="{% url 'frontend:add_experiment_intro' %}">Experiment</a>
+                            <a class="dropdown-item" href="{% url 'frontend:insert_publication' %}">Publication</a>
+                            <a class="dropdown-item" href="{% url 'frontend:insert_sample' %}">Sample</a>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'profiles:profiles' %}">Profile</a>
+                    </li>
+                    {% if user.us_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'account_logout' %}">Logout</a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'account_login' %}">Login</a>
+                    </li>
+                    {% endif %}
+                    
+                    
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Info
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="{% url 'frontend:contact' %}">Contact</a>
+                            <a class="dropdown-item" href="#">About</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    {% if messages %}
+    <div class="message-container col-12">
+        {% for message in messages %}
+            {% with message.level as level %}
+                {% if level == 40 %}
+                    {% include 'includes/toasts/toast_error.html' %}
+                {% elif level == 30 %}
+                    {% include 'includes/toasts/toast_warning.html' %}
+                {% elif level == 25 %}
+                    {% include 'includes/toasts/toast_success.html' %}
+                {% else %}
+                    {% include 'includes/toasts/toast_info.html' %}
+                {% endif %}
+            {% endwith %}
+        {% endfor %}
+    </div>
+    {% endif %}
+ 
+    {% block page_header %}
+    {% endblock %}
+
+    {% block content %}
+    {% endblock%}
+    
+    <footer class="footer mt-auto py-3">
+        <p class="m-0 text-center text-white">MADE BY ANDREAS</p>
+        <p class="m-0 text-center text-white">Follow me: 
+          <a href="https://facebook.com" aria-label="Visit our Facebook page (opens in a new tab)"
+          target="_blank" rel="noopener"><i class="fab fa-facebook-square mx-3 text-white" aria-hidden="true"></i></a>
+          <a href="https://youtube.com" aria-label="Visit our Youtube channel (opens in a new tab)"
+          target="_blank" rel="noopener"><i class="fab fa-youtube-square mx-3 text-white" aria-hidden="true"></i></a>
+          <a href="https://github.com/AndreasChristensen89?tab=repositories" aria-label="Visit my Github page (opens in a new tab)"
+          target="_blank" rel="noopener"><i class="fab fa-github mx-3 text-white" aria-hidden="true"></i></a>
+          <a href="https://instagram.com" aria-label="Visit our instagram page (opens in a new tab)"
+          target="_blank" rel="noopener"><i class="fab fa-instagram-square mx-3 text-white" aria-hidden="true"></i></a>
+        </p>
+        
+    </footer>
+
+    {% block postloadjs %}
+    <script type="text/javascript">
+        $('.toast').addClass('show');
+        
+        setTimeout(function () {
+          let messages = document.getElementById('msg');
+          let alert = new bootstrap.Alert(messages);
+          alert.close();
+      }, 3000);
+    </script>
+    {% endblock %}
+
+  </body>
+</html>

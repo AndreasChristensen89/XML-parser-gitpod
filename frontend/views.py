@@ -12,7 +12,7 @@ from django.contrib import messages
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
-from parser.xlm_parsers import generateXMLPublication, generateXMLSample, generateXMLExperiment
+from xml_parser.xlm_parsers import generateXMLPublication, generateXMLSample, generateXMLExperiment
 from django.http.response import JsonResponse
 
 
