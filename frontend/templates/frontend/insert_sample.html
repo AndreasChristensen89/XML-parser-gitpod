@@ -1,0 +1,433 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block page_header %}
+<div class="container header-container">
+    <div class="container-header"></div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-10 py-5 pb-2 mx-auto text-center">
+            <h1 class="h1 mx-auto rounded contact-heading">
+                Insert Sample
+            </h1>
+        </div>
+    </div>
+
+    <div class="row my-5">
+        <div class="col-12 mx-auto text-center">
+            <a class="text-center border border-black p-2 bg-info" href="{% url 'frontend:upload_sample' %}">Upload document to fill in</a>
+        </div>
+    </div>
+    <div id="fillInSampleData" class="row my-5">
+        <div class="col-12 mx-auto text-center">
+            <btn id="fill_in_button" class="btn btn-success text-center border border-black p-2" onclick="fillInUploadedData()">Insert uploaded Data</a>
+        </div>
+    </div>
+
+    <div id="clearSampleData" class="row my-5">
+        <div class="col-12 mx-auto text-center">
+            <a class="border border-black bg-danger text-white text-center p-2" href="{% url 'frontend:clear_sample_data' %}">Clear uploaded data</a>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-10 col-md-8 mx-auto mt-3 mb-5 p-4 first-div border rounded">
+            <form id="form" method="post">
+
+                {% csrf_token %}
+                <div id="sample_sections">
+                    <div id="sample_section">
+                    
+                    <div class="row text-center">
+                        <div class="col mb-3">
+                        <a class="btn btn-primary" data-toggle="collapse" href="#collapseSample" role="button" aria-expanded="false"
+                            aria-controls="collapseSample">
+                            Sample
+                        </a>
+                        </div>
+                    </div>
+                    <div class="collapse" id="collapseSample">
+                        <div class="card card-body mb-3">
+
+                        <div class="row text-center">
+                            <div class="col mb-3">
+                                <a class="btn btn-primary mx-auto" data-toggle="collapse" href="#collapseIntro" role="button"
+                                    aria-expanded="false" aria-controls="collapseIntro">
+                                    Intro
+                                </a>
+                            </div>
+                        </div>
+                        <div class="collapse" id="collapseIntro">
+                            <div class="card card-body mb-3">
+                                {{ form.sample_x_import_mode|as_crispy_field }}
+                                {{ form.sample_x_uid|as_crispy_field }}
+
+                                <div id="sample_database_uids">
+                                    <div id="sample_database_uid">
+                                        <div class="card card-body border border-black mb-2">
+                                            {{ form.owner_databases_x_database_uid|as_crispy_field }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row my-3">
+                                    <btn class="btn btn-success mx-auto addfields_button" parent="sample_database_uids" child="sample_database_uid" onclick="addFields(event)"><i class="fa fa-plus" aria-hidden="true"></i></btn>
+                                    <btn class="btn btn-danger mx-auto removefields_hover removefields_button" id="remove_sample_database_uids" parent="sample_database_uids" onclick="removeFields(event)"><i class="fa fa-trash" aria-hidden="true"></i></btn>
+                                </div>
+
+                                <div id="sample_experimentalist_uids">
+                                    <div id="sample_experimentalist_uid">
+                                        <div class="card card-body border border-black mb-2">
+                                            {{ form.experimentalists_x_experimentalist_uid|as_crispy_field }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row my-3">
+                                    <btn class="btn btn-success mx-auto addfields_button" parent="sample_experimentalist_uids" child="sample_experimentalist_uid" onclick="addFields(event)"><i class="fa fa-plus" aria-hidden="true"></i></btn>
+                                    <btn class="btn btn-danger mx-auto removefields_hover removefields_button" id="remove_sample_experimentalist_uids" parent="sample_experimentalist_uids" onclick="removeFields(event)"><i class="fa fa-trash" aria-hidden="true"></i></btn>
+                                </div>
+                                
+                            </div>
+                        </div>
+
+                        <div class="row text-center">
+                            <div class="col mb-3">
+                            <a class="btn btn-primary" data-toggle="collapse" href="#collapseSampleInfo" role="button" aria-expanded="false"
+                                aria-controls="collapseSampleInfo">
+                                Sample Info
+                            </a>
+                            </div>
+                        </div>
+                        <div class="collapse" id="collapseSampleInfo">
+                            <div class="card card-body mb-3">
+                                {{ form.sample_x_name|as_crispy_field }}
+                                {{ form.sample_x_date|as_crispy_field }}
+                                {{ form.sample_x_provider|as_crispy_field }}
+                                {{ form.sample_x_is_generic|as_crispy_field }}
+                            </div>
+                        </div>
+                
+                        <div class="row text-center">
+                            <div class="col mb-3">
+                                <a class="btn btn-primary" data-toggle="collapse" href="#collapseBody" role="button" aria-expanded="false"
+                                    aria-controls="collapseBody">
+                                    Natural Terrestrial Sample
+                                </a>
+                            </div>
+                        </div>
+                        <div class="collapse" id="collapseBody">
+                            <div class="card card-body mb-3">
+                                {{ form.body_x_uid|as_crispy_field }}
+                                {{ form.body_x_terrain_type|as_crispy_field }}
+                                {{ form.body_x_coordinate_system|as_crispy_field }}
+
+                                <div class="card card-body mb-3 border border-black">
+                                    {{ form.geolocation_x_place|as_crispy_field }}
+                                    {{ form.geolocation_x_region|as_crispy_field }}
+                                    {{ form.geolocation_x_country_code|as_crispy_field }}
+                                    {{ form.geolocation_x_type|as_crispy_field }}
+                                    <p class="lead">Coordinates</p>
+                                    <div class="card card-body mb-3">
+                                        <p>Coordinate</p>
+                                        <div id="sample_coordinates">
+                                            <div id="sample_coordinate">
+                                                <div class="card card-body mb-3 border border-black">
+                                                    {{ form.coordinate_x_latitude|as_crispy_field }}
+                                                    {{ form.coordinate_x_longitude|as_crispy_field }}
+                                                    {{ form.coordinate_x_altitude|as_crispy_field }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row my-3">
+                                            <btn class="btn btn-success mx-auto addfields_button" parent="sample_coordinates" child="sample_coordinate" onclick="addFields(event)"><i class="fa fa-plus" aria-hidden="true"></i></btn>
+                                            <btn class="btn btn-danger mx-auto removefields_hover removefields_button" id="remove_sample_coordinates" parent="sample_coordinates" onclick="removeFields(event)"><i class="fa fa-trash" aria-hidden="true"></i></btn>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+
+                        <div class="row text-center">
+                            <div class="col mb-3">
+                                <a class="btn btn-primary" data-toggle="collapse" href="#collapseSampleTwo" role="button" aria-expanded="false"
+                                    aria-controls="collapseSampleTwo">
+                                    Multiple Sections
+                                </a>
+                            </div>
+                        </div>
+                        <div class="collapse" id="collapseSampleTwo">
+                            <div class="card card-body mb-3">
+                                {{ form.sample_x_surface_roughness|as_crispy_field }}
+                                {{ form.sample_x_size_unit|as_crispy_field }}
+                                {{ form.sample_x_comments|as_crispy_field }}
+                                {{ form.sample_x_substrate_material|as_crispy_field }}
+                                {{ form.sample_x_substrate_comments|as_crispy_field }}
+                            </div>
+                        </div>
+
+                        <div class="row text-center">
+                            <div class="col mb-3">
+                                <a class="btn btn-primary" data-toggle="collapse" href="#collapseParametersEnvironment" role="button"
+                                    aria-expanded="false" aria-controls="collapseParametersEnvironment">
+                                    Parameters Environment
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="collapse" id="collapseParametersEnvironment">
+                            <div class="card card-body mb-3">
+                    
+                                {{ form.parameters_environment_x_time_unit|as_crispy_field }}
+                                <p>
+                                    <a class="btn btn-primary" data-toggle="collapse" href="#collapseTemperature" role="button"
+                                        aria-expanded="false" aria-controls="collapseTemperature">
+                                        Temperature
+                                    </a>
+                                </p>
+                                <div class="collapse" id="collapseTemperature">
+                                    <div class="card card-body mb-3">
+                                        {{ form.temperature_x_unit|as_crispy_field }}
+                                        {{ form.temperature_x_value|as_crispy_field }}
+                                        {{ form.temperature_x_error|as_crispy_field }}
+                                        {{ form.temperature_x_time|as_crispy_field }}
+                                        {{ form.temperature_x_time_error|as_crispy_field }}
+                                        {{ form.temperature_x_max|as_crispy_field }}
+                                        {{ form.temperature_x_max_error|as_crispy_field }}
+                                        {{ form.temperature_x_max_time|as_crispy_field }}
+                                        {{ form.temperature_x_comments|as_crispy_field }}
+                                    </div>
+                                </div>
+                    
+                                <p>
+                                    <a class="btn btn-primary" data-toggle="collapse" href="#collapseFluid" role="button"
+                                        aria-expanded="false" aria-controls="collapseFluid">
+                                        Fluid
+                                    </a>
+                                </p>
+                                <div class="collapse" id="collapseFluid">
+                                    <div class="card card-body mb-3">
+                                        {{ form.fluid_x_type|as_crispy_field }}
+                                        {{ form.fluid_x_temperature|as_crispy_field }}
+                                        {{ form.fluid_x_temperature_error|as_crispy_field }}
+                                        {{ form.fluid_x_pressure_unit|as_crispy_field }}
+                                        {{ form.fluid_x_pressure|as_crispy_field }}
+                                        {{ form.fluid_x_pressure_error|as_crispy_field }}
+                                        {{ form.fluid_x_ph|as_crispy_field }}
+                                        {{ form.fluid_x_ph_error|as_crispy_field }}
+                                        {{ form.fluid_x_time|as_crispy_field }}
+                                        {{ form.fluid_x_time_error|as_crispy_field }}
+                                        {{ form.fluid_x_comments|as_crispy_field }}
+                                    </div>
+                                </div>
+                    
+                            </div>
+                        </div>
+                    
+                        <div class="row text-center">
+                            <div class="col mb-3">
+                                <a class="btn btn-primary" data-toggle="collapse" href="#collapseLayers" role="button" aria-expanded="false"
+                                    aria-controls="collapseLayers">
+                                    Layers
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="collapse" id="collapseLayers">
+                            <div id="sample_layers">
+                                <div id="sample_layer">
+                                    <p>
+                                        <a class="btn btn-primary mx-auto" data-toggle="collapse" href="#collapseLayer" role="button"
+                                            aria-expanded="false" aria-controls="collapseLayer">Layer</a>
+                                    </p>
+                                    <div class="collapse" id="collapseLayer">
+                                        <div class="card card-body mb-3 border border-black">
+                                            {{ form.layer_x_import_mode|as_crispy_field }}
+                                            {{ form.layer_x_name|as_crispy_field }}
+                                            {{ form.layer_x_order|as_crispy_field }}
+                                            {{ form.layer_x_type|as_crispy_field }}
+                                            {{ form.layer_x_thickness|as_crispy_field }}
+                                            {{ form.layer_x_thickness_error|as_crispy_field }}
+                                            {{ form.layer_x_mass|as_crispy_field }}
+                                            {{ form.layer_x_mass_error|as_crispy_field }}
+                                            {{ form.layer_x_texture|as_crispy_field }}
+                                            {{ form.layer_x_porosity_type|as_crispy_field }}
+                                            {{ form.layer_x_compacity|as_crispy_field }}
+                                            {{ form.layer_x_compacity_error|as_crispy_field }}
+                                            {{ form.layer_x_density|as_crispy_field }}
+                                            {{ form.layer_x_density_error|as_crispy_field }}
+                                            {{ form.layer_x_comments|as_crispy_field }}
+                                            {{ form.layer_x_formation_mode|as_crispy_field }}
+                                            {{ form.layer_x_formation_rate|as_crispy_field }}
+                                            {{ form.layer_x_formation_temperature|as_crispy_field }}
+                                            {{ form.layer_x_formation_temperature_error|as_crispy_field }}
+                                            {{ form.layer_x_formation_pressure|as_crispy_field }}
+                                            {{ form.layer_x_formation_pressure_error|as_crispy_field }}
+                                            {{ form.layer_x_formation_fluid_pressure|as_crispy_field }}
+                                            {{ form.layer_x_formation_fluid_pressure_error|as_crispy_field }}
+                                            {{ form.layer_x_formation_comments|as_crispy_field }}
+                                            {{ form.layer_x_materials_mixing|as_crispy_field }}
+                        
+                                            <p>
+                                                <a class="btn btn-primary" data-toggle="collapse" href="#collapseMaterials" role="button"
+                                                    aria-expanded="false" aria-controls="collapseMaterials">
+                                                    Materials
+                                                </a>
+                                            </p>
+                                            <div class="collapse" id="collapseMaterials">
+                                                <div class="card card-body mb-3">
+                                                    <div id="sample_materials">
+                                                        <div id="sample_material">
+                                                            <p>
+                                                                <a class="btn btn-primary" data-toggle="collapse" href="#collapseMaterial" role="button"
+                                                                    aria-expanded="false" aria-controls="collapseMaterial">
+                                                                    Material
+                                                                </a>
+                                                            </p>
+                                                            <div class="collapse" id="collapseMaterial">
+                                                                <div class="card card-body mb-3">
+                                                                    {{ form.material_x_import_mode|as_crispy_field }}
+                                                                    {{ form.material_x_uid|as_crispy_field }}
+                                                                    {{ form.material_x_relevance|as_crispy_field }}
+                                                                    {{ form.material_x_arrangement|as_crispy_field }}
+                                                                    {{ form.material_x_mass|as_crispy_field }}
+                                                                    {{ form.material_x_mass_error|as_crispy_field }}
+                                                                    {{ form.material_x_mass_fraction|as_crispy_field }}
+                                                                    {{ form.material_x_mass_fraction_error|as_crispy_field }}
+                                                                    {{ form.material_x_abundance_comments|as_crispy_field }}
+                                                                    {{ form.material_x_name|as_crispy_field }}
+                                                                    {{ form.material_x_family|as_crispy_field }}
+                                                                    {{ form.material_x_local_reference_code|as_crispy_field }}
+                                                                    {{ form.material_x_origin|as_crispy_field }}
+                                                                    {{ form.material_x_comments|as_crispy_field }}
+                                                                    {{ form.material_x_constituents_mixing|as_crispy_field }}
+                                
+                                                                    <p>
+                                                                        <a class="btn btn-primary" data-toggle="collapse"
+                                                                            href="#collapseBasicConstituents" role="button" aria-expanded="false"
+                                                                            aria-controls="collapseBasicConstituents">
+                                                                            Basic Constituents
+                                                                        </a>
+                                                                    </p>
+                                                                    <div class="collapse" id="collapseBasicConstituents">
+                                                                        <div class="card card-body mb-3">
+                                                                            <div id="sample_basic_constituents">
+                                                                                <div id="sample_basic_constituent">
+                                                                                    <p>
+                                                                                        <a class="btn btn-primary" data-toggle="collapse"
+                                                                                            href="#collapseBasicConstituent" role="button" aria-expanded="false"
+                                                                                            aria-controls="collapseBasicConstituent">
+                                                                                            Basic Constituent
+                                                                                        </a>
+                                                                                    </p>
+                                                                                    <div class="collapse" id="collapseBasicConstituent">
+                                                                                        <div class="card card-body mb-3">
+                                                                                                {{ form.basic_constituent_x_import_mode|as_crispy_field }}
+                                                                                                {{ form.basic_constituent_x_uid|as_crispy_field }}
+                                                                                                {{ form.basic_constituent_x_relevance|as_crispy_field }}
+                                                                                                {{ form.basic_constituent_x_arrangement|as_crispy_field }}
+                                                                                                {{ form.basic_constituent_x_mass|as_crispy_field }}
+                                                                                                {{ form.basic_constituent_x_mass_error|as_crispy_field }}
+                                                                                                {{ form.basic_constituent_x_mass_fraction|as_crispy_field }}
+                                                                                                {{ form.basic_constituent_x_mass_fraction_error|as_crispy_field }}
+                                                                                                {{ form.basic_constituent_x_mole|as_crispy_field }}
+                                                                                                {{ form.basic_constituent_x_mole_error|as_crispy_field }}
+                                                                                                {{ form.basic_constituent_x_mole_fraction|as_crispy_field}}
+                                                                                                {{ form.basic_constituent_x_mole_fraction_error|as_crispy_field }}
+                                                                                                {{ form.basic_constituent_x_abundance_comments|as_crispy_field }}
+                                                                                                {{ form.basic_constituent_x_name|as_crispy_field }}
+                                                                                                {{ form.basic_constituent_x_fundamental_phase_uid|as_crispy_field }}
+                                                                                                {{ form.basic_constituent_x_texture|as_crispy_field }}
+                                                                                                {{ form.basic_constituent_x_comments|as_crispy_field }}
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="row my-3">
+                                                                                <btn class="btn btn-success mx-auto addfields_button" added="_added" parent="sample_basic_constituents" child="sample_basic_constituent" onclick="addFields(event)"><i class="fa fa-plus" aria-hidden="true"></i></btn>
+                                                                                <btn class="btn btn-danger mx-auto removefields_hover removefields_button" id="remove_sample_basic_constituents" parent="sample_basic_constituents" onclick="removeFields(event)"><i class="fa fa-trash" aria-hidden="true"></i></btn>
+                                                                            </div>
+
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row my-3">
+                                                        <btn class="btn btn-success mx-auto addfields_button" parent="sample_materials" child="sample_material" added="_inner" onclick="addSection(event)"><i class="fa fa-plus" aria-hidden="true"></i></btn>
+                                                        <btn class="btn btn-danger mx-auto removefields_hover removefields_button" id="remove_sample_materials" parent="sample_materials" onclick="removeFields(event)"><i class="fa fa-trash" aria-hidden="true"></i></btn>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row my-3">
+                                <btn class="btn btn-success mx-auto addfields_button" added="" parent="sample_layers" child="sample_layer" onclick="addSection(event)"><i class="fa fa-plus" aria-hidden="true"></i></btn>
+                                <btn class="btn btn-danger mx-auto removefields_hover removefields_button" id="remove_sample_layers" parent="sample_layers" onclick="removeFields(event)"><i class="fa fa-trash" aria-hidden="true"></i></btn>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                    </div>
+                </div>
+
+            <div class="row">
+                <btn class="btn btn-success mx-auto add addfields_button" parent="sample_sections" child="sample_section" onclick="addMajorSample(event)"><i class="fa fa-plus-circle" aria-hidden="true"></i></btn>
+                <btn class="btn btn-danger mx-auto removefields_hover removefields_button" id="remove_sample_sections"  parent="sample_sections" onclick="removeFields(event)"><i class="fa fa-trash" aria-hidden="true"></i></btn>
+            </div>
+                    
+            <button class="btn contact-btn m-4" data-toggle="modal" data-target="message"
+                type="submit">Create XML file</button>
+
+            </form>
+        </div>
+    </div>
+</div>
+<div id="autofill_experimentalist_uid" style="display:none" data-autofill="{{ profile.experimentalist_uid }}"></div>
+<div id="autofill_laboratory_uid" style="display:none" data-autofill="{{ profile.laboratory_uid }}"></div>
+
+{% endblock %}
+
+{% block postloadjs %}
+    {{ block.super }}
+    <script>
+        let uploaded_data = '{{ uploaded_data|safe }}';
+        let researcher = '{{ profile.experimentalist_uid }}';
+        let sessionArray = '{{session_json|safe}}';
+
+        let originalSampleSection = document.getElementById("sample_section");
+        let originalSampleDatabaseUID = document.getElementById("sample_database_uid");
+        let originalSampleExperimentalistUID = document.getElementById("sample_experimentalist_uid");
+        let originalSampleCoordinate = document.getElementById("sample_coordinate");
+        let originalSampleBasicConstituents = document.getElementById("sample_basic_constituents");
+        let originalSampleMaterial = document.getElementById("sample_material");
+        let originalSampleLayer = document.getElementById("sample_layer");
+
+        const globalClones = [
+            originalSampleSection.cloneNode(true),
+            originalSampleDatabaseUID.cloneNode(true),
+            originalSampleExperimentalistUID.cloneNode(true),
+            originalSampleCoordinate.cloneNode(true),
+            originalSampleBasicConstituents.cloneNode(true),
+            originalSampleMaterial.cloneNode(true),
+            originalSampleLayer.cloneNode(true)
+        ];
+
+        let ajaxURL = "/insert-sample/";
+    </script>
+    <script type="text/javascript" src="{% static 'frontend/js/add_form_fields.js' %}"></script>
+    <script type="text/javascript" src="{% static 'frontend/js/auto_fill.js' %}"></script>
+    <!-- <script type="text/javascript" src="{% static 'frontend/js/sample_auto_fill.js' %}"></script> -->
+{% endblock %}

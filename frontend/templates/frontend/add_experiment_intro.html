@@ -1,0 +1,266 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block page_header %}
+<div class="container header-container">
+    <div class="container-header"></div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="col-10 py-5 pb-2 mx-auto text-center">
+            <h1 class="h1 mx-auto rounded contact-heading">
+                Add Experiment Intro
+            </h1>
+        </div>
+    </div>
+
+    <div class="row text-center">
+        <ul class="list-group list-group-horizontal mx-auto">
+            <li class="list-group-item bg-primary text-white">Intro</li>
+            <a class="list-group-item" href="{% url 'frontend:add_geolocation' %}">Geolocation</a>
+            <a class="list-group-item" href="{% url 'frontend:add_parameters_instrument' %}">Instrument Parameters</a>
+            <a class="list-group-item" href="{% url 'frontend:add_experiment_multiple_sections' %}">Multiple Sections</a>
+            <a class="list-group-item" href="{% url 'frontend:add_experiment_spectra' %}">Spectra</a>
+            <a class="list-group-item" href="{% url 'frontend:add_experiment_finish' %}">Finish</a>
+        </ul> 
+    </div>
+
+    <div class="row text-center my-5">
+        <div class="col mx-auto">
+            <a class="btn btn-danger" href="{% url 'frontend:delete_experiment_intro' %}">Remove info</a>
+        </div>
+    </div>
+
+    <div class="row my-5">
+        <div class="col-10 mx-auto mt-3 mb-5 p-4 first-div border rounded">
+            <form method="post" id="form">
+                {% csrf_token %}
+                <div class="my-4">
+                    {{ form.experiment_x_import_mode|as_crispy_field }}
+                    {{ form.experiment_x_uid|as_crispy_field }}
+                </div>
+
+                <!---------------------- Owner database ---------------------->
+                <div class="my-5 border-bottom border-top">
+                    <div class="my-3">
+                        <h3 class="h3 col-6 mx-auto text-center">Owner databases</h3>
+                        <div class="col-9 mx-auto">
+                            <div id="database_uids">
+                                <div id="database_uid">
+                                    {{ form.owner_databases_x_database_uid|as_crispy_field }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row my-3">
+                        <btn class="btn btn-success mx-auto addfields_button" parent="database_uids" child="database_uid" onclick="addFields(event)"><i class="fa fa-plus" aria-hidden="true"></i></btn>
+                        <btn class="btn btn-danger mx-auto removefields_hover removefields_button" id="remove_database_uids" parent="database_uids" onclick="removeFields(event)"><i class="fa fa-trash" aria-hidden="true"></i></btn>
+                    </div>
+                    <!-- <div class="my-3">
+                        <div class="col-9 text-center mx-auto">
+                            <btn class="col-6 btn btn-success mx-auto my-2 rounded" parent="database_uids" child="database_uid" onclick="addFields(event)">Add Database UID</btn>
+                        </div>
+                        <div class="col-9 text-center mx-auto">
+                            <btn id="remove_database_uids" class="col-6 btn btn-danger mx-auto my-2 rounded removefields_button" parent="database_uids" onclick="removeFields(event)">Remove Last Add</btn>
+                        </div>
+                    </div> -->
+                </div>
+
+                <!---------------------- Experimentalists ---------------------->
+
+                <div class="my-5 border-bottom">
+                    <div>
+                        <h3 class="h3 col-6 mx-auto text-center">Experimentalists</h3>
+                        <div class="col-9 mx-auto">
+                            <div id="experimentalist_uids">
+                                <div id="experimentalist_uid">
+                                    {{ form.experimentalists_x_experimentalist_uid|as_crispy_field }}
+                                </div>   
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row my-3">
+                        <btn class="btn btn-success mx-auto addfields_button" parent="experimentalist_uids" child="experimentalist_uid" onclick="addFields(event)"><i class="fa fa-plus" aria-hidden="true"></i></btn>
+                        <btn class="btn btn-danger mx-auto removefields_hover removefields_button" id="remove_experimentalist_uids" parent="experimentalist_uids" onclick="removeFields(event)"><i class="fa fa-trash" aria-hidden="true"></i></btn>
+                    </div>
+
+                    <!-- <div class="my-3">
+                        <div class="col-9 text-center mx-auto">
+                            <btn class="col-6 btn btn-success mx-auto my-2 rounded" parent="experimentalist_uids" child="experimentalist_uid" onclick="addFields(event)">Add Experimentalist UID</btn>
+                        </div>
+                        <div class="col-9 text-center mx-auto">    
+                            <btn id="remove_experimentalist_uids" class="col-6 btn btn-danger mx-auto my-2 rounded removefields_button" parent="experimentalist_uids" onclick="removeFields(event)">Remove Last Add</btn>
+                        </div>
+                    </div> -->
+                    
+
+                </div>
+
+                <!---------------------- Types ---------------------->
+
+                <div class="my-5 border-bottom">
+                    <div>
+                        <h3 class="h3 col-6 mx-auto text-center">Types</h3>
+                        <div class="col-9 mx-auto">
+                            <div id="types_types">
+                                <div id="types_type">
+                                    {{ form.types_x_type|as_crispy_field }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row my-3">
+                        <btn class="btn btn-success mx-auto addfields_button" parent="types_types" child="types_type" onclick="addFields(event)"><i class="fa fa-plus" aria-hidden="true"></i></btn>
+                        <btn class="btn btn-danger mx-auto removefields_hover removefields_button" id="remove_types_types" parent="types_types" onclick="removeFields(event)"><i class="fa fa-trash" aria-hidden="true"></i></btn>
+                    </div>
+
+                    <!-- <div class="my-3">
+                        <div class="col-9 text-center mx-auto">
+                            <btn class="col-6 btn btn-success mx-auto" parent="types_types" child="types_type" onclick="addFields(event)">Add Type</btn>
+                        </div>
+                        <div class="col-9 text-center mx-auto"> 
+                            <btn id="remove_types_types" class="col-6 btn btn-danger mx-auto my-2 rounded removefields_button" parent="types_types" onclick="removeFields(event)">Remove Last Add</btn>
+                        </div>
+                    </div> -->
+
+                </div>
+                
+                {{ form.experiment_x_title|as_crispy_field }}
+                {{ form.experiment_x_description|as_crispy_field }}
+                {{ form.experiment_x_date_begin|as_crispy_field }}
+                {{ form.experiment_x_date_end|as_crispy_field }}
+                {{ form.experiment_x_parent_experiment_uid|as_crispy_field }}
+                {{ form.experiment_x_laboratory_uid|as_crispy_field }}
+
+
+                <!---------------------- Variable Parameters Types ---------------------->
+                
+                <div class="my-5 border-bottom">
+                    <div>
+                        <h3 class="h3 col-6 mx-auto text-center">Experiment Variables</h3>
+                        <div class="col-9 mx-auto">
+                            <div id="parameter_types_parameter_types">
+                                <div id="parameter_types_parameter_type">
+                                    {{ form.variable_parameters_types_x_variable_parameters_type|as_crispy_field }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row my-3">
+                        <btn class="btn btn-success mx-auto addfields_button" parent="parameter_types_parameter_types" child="parameter_types_parameter_type" onclick="addFields(event)"><i class="fa fa-plus" aria-hidden="true"></i></btn>
+                        <btn class="btn btn-danger mx-auto removefields_hover removefields_button" id="remove_parameter_types_parameter_types" parent="parameter_types_parameter_types" onclick="removeFields(event)"><i class="fa fa-trash" aria-hidden="true"></i></btn>
+                    </div>
+
+                    <!-- <div class="my-3">
+                        <div class="col-9 text-center mx-auto">
+                            <btn class="col-6 btn btn-success col-3 mx-auto" parent="parameter_types_parameter_types" child="parameter_types_parameter_type" onclick="addFields(event)">Add Variable Parameter Type</btn>
+                        </div>
+                        <div class="col-9 text-center mx-auto"> 
+                            <btn id="remove_parameter_types_parameter_types" class="col-6 btn btn-danger mx-auto my-2 rounded removefields_button" parent="parameter_types_parameter_types" onclick="removeFields(event)">Remove Last Add</btn>
+                        </div>
+                    </div> -->
+                </div>
+                
+                {{ form.experiment_x_variable_parameters_comments|as_crispy_field }}
+
+                {% if done %}
+                <input class="my-2" type="submit" value="Update section"/>
+                {% else %}
+                <input class="my-2" type="submit" value="Attach Intro to file"/>
+                {% endif %}
+            </form>
+        </div>
+
+    </div>
+
+</div>
+</div>
+<div id="autofill_experimentalist_uid" style="display:none" data-autofill="{{ profile.experimentalist_uid }}"></div>
+<div id="autofill_laboratory_uid" style="display:none" data-autofill="{{ profile.laboratory_uid }}"></div>
+{% endblock %}
+
+{% block postloadjs %}
+    {{ block.super }}
+<script>
+    var uploaded_data = '{{ uploaded_data|safe }}';
+    var researcher = '{{ profile.experimentalist_uid }}';
+    var sessionArray = '{{session_json|safe}}';
+    // var postedSession = `{{ posted_session_json|safe }}`;
+
+    let originalDatabaseUID = document.getElementById("database_uid");
+    let originalExperimentalistUID = document.getElementById("experimentalist_uid");
+    let originalTypesType = document.getElementById("types_type");
+    let originalParameterType = document.getElementById("parameter_types_parameter_type");
+
+    const globalClones = [
+        originalTypesType.cloneNode(true),
+        originalDatabaseUID.cloneNode(true),
+        originalExperimentalistUID.cloneNode(true),
+        originalParameterType.cloneNode(true)
+    ];
+
+    let ajaxURL = "/add-experiment-intro/";
+</script>
+<script type="text/javascript" src="{% static 'frontend/js/add_form_fields.js' %}"></script>
+<script type="text/javascript" src="{% static 'frontend/js/auto_fill.js' %}"></script>
+<!-- <script>
+    var session = '{{ session|safe }}';
+    var rebuild = `{{ rebuild|safe }}`;
+    var ownerData = `{{owner_databases_repeat|safe}}`
+    var experimentalistUidRepeat = `{{experimentalist_uid_repeat|safe}}`
+    var typeRepeat = `{{type_repeat|safe}}`
+    var variableParametersTypeRepeat = `{{variable_parameters_type_repeat|safe}}`
+</script> -->    
+<!-- <script>
+    if (rebuild === "None") {
+        $("[name=owner_databases_count]").val(ownerData);
+        $("[name=experimentalist_uid_count]").val(experimentalistUidRepeat);
+        $("[name=type_count]").val(typeRepeat);
+        $("[name=variable_parameters_type_count]").val(variableParametersTypeRepeat);
+    } else {
+        $("[name=owner_databases_count]").val(rebuild[2]);
+        $("[name=experimentalist_uid_count]").val(rebuild[7]);
+        $("[name=type_count]").val(rebuild[12]);
+        $("[name=variable_parameters_type_count]").val(rebuild[17]);
+    }
+    var databaseUIDCount = Number($("[name=owner_databases_count]").val());
+    var experimentalistUIDCount = Number($("[name=experimentalist_uid_count]").val());
+    var typeCount = Number($("[name=type_count]").val());
+    var variableParametersTypeCount = Number($("[name=variable_parameters_type_count]").val());
+
+    $("[name=submit]").val("submit");
+    let submit = $("[name=submit]").val();
+    // get extra form count so we know what index to use for the next item.
+
+    $("#add-database-UID").click(function () {
+        databaseUIDCount++;
+        // increment form count so our view knows to populate 
+        // that many fields for validation
+        $("[name=owner_databases_count]").val(databaseUIDCount);
+        $("[name=submit]").val("false");
+        console.log($("[name=owner_databases_count]").val())
+    })
+    $("#add-experimentalist-uid").click(function () {
+        experimentalistUIDCount++;
+        $("[name=experimentalist_uid_count]").val(experimentalistUIDCount);
+        $("[name=submit]").val("false");
+    })
+    $("#add-type").click(function () {
+        typeCount++;
+        $("[name=type_count]").val(typeCount);
+        $("[name=submit]").val("false");
+    })
+    $("#add-variable-parameters-type-count").click(function () {
+        variableParametersTypeCount++;
+        $("[name=variable_parameters_type_count]").val(variableParametersTypeCount);
+        $("[name=submit]").val("false");
+    })
+</script> -->
+{% endblock %}

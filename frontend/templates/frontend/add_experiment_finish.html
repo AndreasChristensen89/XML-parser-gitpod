@@ -1,0 +1,176 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block page_header %}
+<div class="container header-container">
+    <div class="container-header"></div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="col-10 py-5 pb-2 mx-auto text-center">
+            <h1 class="h1 mx-auto rounded contact-heading">
+                Add Experiment Finish
+            </h1>
+        </div>
+    </div>
+
+    <div class="row text-center">
+        <ul class="list-group list-group-horizontal mx-auto">
+            <a class="list-group-item bg-success text-white" href="{% url 'frontend:add_experiment_intro' %}">Intro</a>
+            <a class="list-group-item bg-success text-white" href="{% url 'frontend:add_geolocation' %}">Geolocation</a>
+            <a class="list-group-item bg-success text-white" href="{% url 'frontend:add_parameters_instrument' %}">Parameters Instrument</a>
+            <a class="list-group-item bg-success text-white" href="{% url 'frontend:add_experiment_multiple_sections' %}">Multiple Sections</a>
+            <a class="list-group-item bg-success text-white" href="{% url 'frontend:add_experiment_spectra' %}">Spectra</a>
+            <li class="list-group-item bg-primary text-white">Finish</li>
+        </ul> 
+    </div>
+
+    <div class="row mx-auto my-5 text-center">
+        <div class="col-6 text-center">
+            <h2 class="h2 my-5">Experiment Intro</h2>
+            <table class="table mx-auto border border-light">
+                <tr>
+                  <th scope="col-3">Number</th>
+                  <th scope="col-3">Field name</th>
+                  <th scope="col-3">Input</th>
+                </tr>
+                
+                {% for key, value in experiment_intro.items %}
+                <tr>
+                    <th scope="row">{{ key }}</th>
+                    <td>{{ value.1 }}</td>
+                    <td>{{ value.2 }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+            
+        <div class="col-6 text-center">
+            <h2 class="h2 my-5">Geolocation</h2>
+            <table class="table mx-auto border border-light">
+                <tr>
+                  <th scope="col-3">Number</th>
+                  <th scope="col-3">Field name</th>
+                  <th scope="col-3">Input</th>
+                </tr>
+            
+                {% for key, value in experiment_geolocation.items %}
+                <tr>
+                    <th scope="row">{{ key }}</th>
+                    <td>{{ value.1 }}</td>
+                    <td>{{ value.2 }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+    
+    <div class="row mx-auto my-5 text-center">
+        <div class="col-6 text-center">
+            <h2 class="h2 my-5">Parameter Instruments</h2>
+
+            <table class="table mx-auto border border-light">
+                <tr>
+                  <th scope="col-3">Number</th>
+                  <th scope="col-3">Field name</th>
+                  <th scope="col-3">Input</th>
+                </tr>
+
+                {% for key, value in experiment_parameters_instrument.items %}
+                <tr>
+                    <th scope="row">{{ key }}</th>
+                    <td>{{ value.1 }}</td>
+                    <td>{{ value.2 }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+        <div class="col-6 text-center">
+            <h2 class="h2 my-5">Multiple Sections</h2>
+            <table class="table mx-auto border border-light">
+                <tr>
+                  <th scope="col-3">Number</th>
+                  <th scope="col-3">Field name</th>
+                  <th scope="col-3">Input</th>
+                </tr>
+                {% for key, value in experiment_multiple_sections.items %}
+                <tr>
+                    <th scope="row">{{ key }}</th>
+                    <td>{{ value.1 }}</td>
+                    <td>{{ value.2 }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+    </div>
+
+            
+    <div class="row my-5 mx-auto">
+        
+            
+        <div class="col-6 text-center">
+            <h2 class="h2 my-5">Spectra</h2>
+            <table class="table mx-auto border border-light">
+                
+                <tr>
+                  <th scope="col">Number</th>
+                  <th scope="col">Field name</th>
+                  <th scope="col">Input</th>
+                </tr>
+                {% for key, value in experiment_add_spectra.items %}
+                <tr>
+                    <th scope="row">{{ key }}</th>
+                    <td>{{ value.1 }}</td>
+                    <td>{{ value.2 }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+
+    <div class="row my-5 mx-auto">
+        <div class="col text-center">
+            <h2 class="h2 my-5">Full Input</h2>
+            <table class="table mx-auto border border-light">
+                <tr>
+                  <th scope="col">Number</th>
+                  <th scope="col">Field name</th>
+                  <th scope="col">Input</th>
+                </tr>
+                {% for key, value in input_dict.items %}
+                <tr>
+                    <th scope="row">{{ key }}</th>
+                    <td>{{ value.1 }}</td>
+                    <td>{{ value.2 }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+            
+    </div>
+            
+    <div class="row my-5">
+    <form class="col text-center mx-auto my-5" method="POST" action="{% url 'frontend:add_experiment_finish' %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-success">
+            Create XML file
+        </button>
+    </form>
+    </div>
+
+</div>
+</div>
+{% endblock %}
+
+{% block postloadjs %}
+    {{ block.super }}
+<script>
+
+</script>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block page_header %}
+<div class="container header-container">
+    <div class="container-header"></div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-10 py-5 pb-2 mx-auto text-center">
+            <h1 class="h1 mx-auto rounded contact-heading">
+                Insert Data
+            </h1>
+        </div>
+    </div>
+
+    <div class="row mb-3 text-center">
+        <a class="col-3 mx-auto border border-black" href="{% url 'frontend:insert_sample' %}">
+            <div>
+                Sample
+            </div>
+        </a>
+
+        <a class="col-3 mx-auto border border-black" href="{% url 'frontend:insert_experiment' %}">
+            <div>
+                Experiment
+            </div>
+        </a>
+
+        <a class="col-3 mx-auto border border-black" href="{% url 'frontend:insert_publication' %}">
+            <div>
+                Publication
+            </div>
+        </a>
+    </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block page_header %}
+<div class="container header-container">
+    <div class="container-header"></div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-10 py-5 pb-2 mx-auto text-center">
+            <h1 class="h1 mx-auto rounded contact-heading">
+                Contact
+            </h1>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-10 mx-auto">
+            <p class="text-center">Feel free to send us a message.</p>
+            <p class="text-center">We will happily respond to any feedback, comments, ideas, or any other inquiries you may have.</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-10 col-md-5 mx-auto mt-3 mb-5 p-4 first-div border rounded">
+            <form id="form" method="post">
+
+                {% csrf_token %}
+                {{ form|crispy }}
+                <button class="btn contact-btn m-4" data-toggle="modal" data-target="message"
+                    type="submit">Send</button>
+
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

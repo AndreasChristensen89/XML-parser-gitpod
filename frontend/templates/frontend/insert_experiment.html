@@ -1,0 +1,796 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block page_header %}
+<div class="container header-container">
+    <div class="container-header"></div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-10 py-5 pb-2 mx-auto text-center">
+            <h1 class="h1 mx-auto rounded contact-heading">
+                Insert Experiment
+            </h1>
+        </div>
+    </div>
+
+    <div class="row mb-3 text-center">
+        <a class="col-3 mx-auto border border-black" href="{% url 'frontend:insert_sample' %}">
+            <div>
+                Sample
+            </div>
+        </a>
+
+        <a class="col-3 mx-auto border border-black" href="{% url 'frontend:insert_experiment' %}">
+            <div>
+                Experiment
+            </div>
+        </a>
+
+        <a class="col-3 mx-auto border border-black" href="{% url 'frontend:insert_publication' %}">
+            <div>
+                Publication
+            </div>
+        </a>
+    </div>
+
+    <div class="row my-5">
+        <div class="col-12 mx-auto text-center">
+            <a class="text-center border border-black p-2 bg-info" href="{% url 'frontend:upload_experiment' %}">Upload document to fill in</a>
+        </div>
+    </div>
+
+    <div id="clearExperimentData" class="row my-5">
+        <div class="col-12 mx-auto text-center">
+            <a class="border border-black bg-danger text-center p-2" href="{% url 'frontend:clear_experiment_data' %}">Clear uploaded experiment data</a>
+        </div>
+    </div>
+
+    <div class="row my-5">
+        <div class="col-12 mx-auto text-center">
+            <p>Choose what to display in form</p>
+        </div>
+        <div class="col-12 mx-auto text-center">
+            <hr class="w-25">
+            <label for="experimentFullForm">Display full form:</label> 
+            <input type="checkbox" id="experimentFullForm" onclick="experimentFunction()">
+            <hr class="w-25">
+        </div>
+        <div class="col-12 mx-auto text-center">
+            <label for="introCheck">Intro:</label> 
+            <input type="checkbox" id="introCheck" onclick="experimentFunction()">
+
+            <label for="expCheck">Experiment</label>
+            <input type="checkbox" id="expCheck" onclick="experimentFunction()">
+
+            <label for="geolocationsCheck">Geolocations:</label> 
+            <input type="checkbox" id="geolocationsCheck" onclick="experimentFunction()">
+        </div>
+
+        <div class="col-12 mx-auto text-center">
+            <label for="experimentVariables">Experiment Variables:</label> 
+            <input type="checkbox" id="experimentVariables" onclick="experimentFunction()">
+
+            <label for="parametersInstrCheck">Parameters Instrument:</label> 
+            <input type="checkbox" id="parametersInstrCheck" onclick="experimentFunction()">
+
+            <label for="experimentComments">Experiment Comments:</label> 
+            <input type="checkbox" id="experimentComments" onclick="experimentFunction()">
+
+            <label for="previewCheck">Preview:</label> 
+            <input type="checkbox" id="previewCheck" onclick="experimentFunction()">
+        </div>
+
+        <div class="col-12 mx-auto text-center">
+            <label for="imagesCheck">Images:</label> 
+            <input type="checkbox" id="imagesCheck" onclick="experimentFunction()">
+
+            <label for="documentationsCheck">Documentations:</label> 
+            <input type="checkbox" id="documentationsCheck" onclick="experimentFunction()">
+
+            <label for="publicationsCheck">Publications:</label> 
+            <input type="checkbox" id="publicationsCheck" onclick="experimentFunction()">
+
+            <label for="sponsorsCheck">Sponsors:</label> 
+            <input type="checkbox" id="sponsorsCheck" onclick="experimentFunction()">
+
+            <label for="spectraCheck">Spectra:</label> 
+            <input type="checkbox" id="spectraCheck" onclick="experimentFunction()">
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-10 col-md-8 mx-auto mt-3 mb-5 p-4 first-div border rounded">
+            <form id="form" method="post">
+
+                {% csrf_token %}
+                <div id="form-intro">
+                    <div class="row">
+                        <a class="btn btn-primary mx-3 mb-4" data-toggle="collapse" href="#collapseIntro" role="button"
+                            aria-expanded="false" aria-controls="collapseIntro">Intro</a>
+                    </div>
+                    <div class="collapse" id="collapseIntro">
+                        <div class="card card-body mb-3">
+                            {{ form.experiment_x_import_mode|as_crispy_field }}
+                            {{ form.experimentalists_x_uid|as_crispy_field }}
+                            <div id="database_uid">
+                            {{ form.owner_databases_x_database_uid|as_crispy_field }}
+                            </div>
+                            <btn class="col-6 btn btn-success mx-auto addCoordinates" section="no" parent="database_uid" original="database_uid">Add Database UID</btn>
+                            <div id="experimentalist_uid">
+                            {{ form.experimentalists_x_experimentalist_uid|as_crispy_field }}
+                            </div>
+                            <btn class="col-6 btn btn-success mx-auto addCoordinates" section="no" parent="experimentalist_uid" original="experimentalist_uid">Add Experimentalist UID</btn>
+                            <div id="types_type">
+                            {{ form.types_x_type|as_crispy_field }}
+                            </div>
+                            <btn class="col-6 btn btn-success mx-auto addCoordinates" section="no" parent="types_type" original="types_type">Add Type</btn>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="form-exp">
+                    <div class="row">
+                        <a class="btn btn-primary mx-3 mb-4" data-toggle="collapse" href="#collapseExperiment" role="button"
+                            aria-expanded="false" aria-controls="collapseExperiment">Experiment</a>
+                    </div>
+                    <div class="collapse" id="collapseExperiment">
+                        <div class="card card-body mb-3">
+                            {{ form.experiment_x_title|as_crispy_field }}
+                            {{ form.experiment_x_description|as_crispy_field }}
+                            {{ form.experiment_x_date_begin|as_crispy_field }}
+                            {{ form.experiment_x_date_end|as_crispy_field }}
+                            {{ form.experiment_x_parent_experiment_uid|as_crispy_field }}
+                            {{ form.experiment_x_laboratory_uid|as_crispy_field }}
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="form-geolocations">
+                    <div class="row">
+                        <a class="btn btn-primary mx-3 mb-4" data-toggle="collapse" href="#collapseGeolocations" role="button"
+                            aria-expanded="false" aria-controls="collapseGeolocations">Geolocations</a>
+                        <p class="text-center">Only for field experiment and remote sensing</p>
+                    </div>
+                    <div class="collapse" id="collapseGeolocations">
+                        <div class="card card-body mb-3">
+                            {{ form.body_x_uid|as_crispy_field }}
+                            {{ form.body_x_coordinate_system|as_crispy_field }}
+                            <div id="geolocations">
+                                <div id="geolocation">
+                                    <a class="btn btn-primary mx-3 mb-4" data-toggle="collapse" href="#collapseGeolocation" role="button"
+                                        aria-expanded="false" aria-controls="collapseGeolocation">Geolocation</a>
+                                    <div class="collapse" id="collapseGeolocation">
+                                    <div class="card card-body mb-3 border border-black">
+                                        {{ form.geolocation_x_place|as_crispy_field }}
+                                        {{ form.geolocation_x_region|as_crispy_field }}
+                                        {{ form.geolocation_x_country_code|as_crispy_field }}
+                                        {{ form.geolocation_x_type|as_crispy_field }}
+                                        <p class="lead">Coordinates</p>
+                                        <div class="card card-body mb-3">
+                                            <p>Coordinate</p>
+                                            <div id="coordinates">
+                                                <div id="coordinate">
+                                                    <div class="card card-body mb-3">
+                                                        {{ form.coordinate_x_latitude|as_crispy_field }}
+                                                        {{ form.coordinate_x_longitude|as_crispy_field }}
+                                                        {{ form.coordinate_x_altitude|as_crispy_field }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <btn class="col-6 btn btn-success mx-auto addCoordinates" section="yes" parent="coordinates" original="coordinate">Add Coordinate</btn>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                            <btn class="col-6 btn btn-success mx-auto addSection" parent="geolocations" original="geolocation">Add Geolocation</btn>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="form-experiment-variables">
+                    <div class="row">
+                        <a class="btn btn-primary mx-3 mb-4" data-toggle="collapse" href="#collapseExperimentVariables" role="button"
+                            aria-expanded="false" aria-controls="collapseExperimentVariables">Experiment Variables</a>
+                    </div>
+                    <div class="collapse" id="collapseExperimentVariables">
+                        <div class="card card-body mb-3">
+                            <div id="variable_parameters_type">
+                                {{ form.variable_parameters_types_x_variable_parameters_type|as_crispy_field }}
+                            </div>
+                            <btn class="col-6 btn btn-success mx-auto addCoordinates" section="no" parent="variable_parameters_type" original="variable_parameters_type">Add Variable Parameters Type</btn>
+                            {{ form.experiment_x_variable_parameters_comments|as_crispy_field }}
+                        </div>
+                    </div>
+                </div>
+
+                <div id="form-parameters-instr">
+                    <div class="row">
+                        <a class="btn btn-primary mx-3 mb-4" data-toggle="collapse" href="#collapseParametersInstruments" role="button"
+                            aria-expanded="false" aria-controls="collapseParametersInstruments">Parameters Instruments</a>
+                    </div>
+                    <div class="collapse" id="collapseParametersInstruments">
+                        <div class="card card-body mb-3">
+                            <div id="parameter_instruments">
+                                <div id="parameter_instrument">
+                                    <a class="btn btn-primary mx-3 mb-4" data-toggle="collapse" href="#collapseParametersInstrument" role="button"
+                                        aria-expanded="false" aria-controls="collapseParametersInstrument">Parameters Instrument</a>
+                                    <div class="collapse" id="collapseParametersInstrument">
+                                    <div class="card card-body mb-3 border border-black">
+                                        {{ form.parameters_instrument_x_instrument_uid|as_crispy_field }}
+                                        {{ form.parameters_instrument_x_instrument_carrier|as_crispy_field }}
+                                        {{ form.parameters_instrument_x_instrument_sample_holder|as_crispy_field }}
+                                        {{ form.parameters_instrument_x_spectrum_scan_number|as_crispy_field }}
+                                        <p>
+                                            <a class="btn btn-danger mx-auto" data-toggle="collapse" href="#collapseSpectral" role="button"
+                                                aria-expanded="false" aria-controls="collapseSpectral">Spectral</a>
+                                        </p>
+                                        <div class="collapse" id="collapseSpectral">
+                                            <div class="card card-body mb-3">
+                                                {{ form.spectral_x_unit|as_crispy_field }}
+                                                {{ form.spectral_x_standard|as_crispy_field }}
+                                                {{ form.spectral_x_observation_mode|as_crispy_field }}
+                                                <p>
+                                                    <a class="btn btn-warning mx-auto" data-toggle="collapse" href="#collapseRangeTypes" role="button"
+                                                        aria-expanded="false" aria-controls="collapseRangeTypes">Range Types</a>
+                                                </p>
+                                                <div class="collapse" id="collapseRangeTypes">
+                                                    <div class="card card-body mb-3">
+                                                        <div id="range_types">
+                                                            <div id="range_type">
+                                                            {{ form.range_types_x_type|as_crispy_field }}
+                                                            </div>
+                                                        </div>
+                                                        <btn class="col-6 btn btn-success mx-auto addCoordinates" section="yes" parent="range_types" original="range_type">Add Range Type</btn>
+                                                    </div>
+                                                </div>
+                                                <p>
+                                                    <a class="btn btn-warning mx-auto" data-toggle="collapse" href="#collapseRanges" role="button"
+                                                        aria-expanded="false" aria-controls="collapseRanges">Ranges</a>
+                                                </p>
+                                                <div class="collapse" id="collapseRanges">
+                                                    <div class="card card-body mb-3">
+                                                        <div id="parameter_instruments_ranges">
+                                                            <div id="parameter_instruments_range">
+                                                                <div class="card card-body mb-3 border border-black">
+                                                                    {{ form.range_x_min|as_crispy_field }}
+                                                                    {{ form.range_x_max|as_crispy_field }}
+                                                                    {{ form.range_x_absorption_edge_element_uid|as_crispy_field }}
+                                                                    {{ form.range_x_absorption_edge_type|as_crispy_field }}
+                                                                    {{ form.range_x_sampling|as_crispy_field }}
+                                                                    {{ form.range_x_resolution|as_crispy_field }}
+                                                                    {{ form.range_x_position_error|as_crispy_field }}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <btn class="col-6 btn btn-success mx-auto addCoordinates" section="yes" parent="parameter_instruments_ranges" original="parameter_instruments_range">Add Range</btn>
+                                                    </div>
+                                                </div>
+                                                <p>
+                                                    <a class="btn btn-warning mx-auto" data-toggle="collapse" href="#collapseFilters" role="button"
+                                                        aria-expanded="false" aria-controls="collapseFilters">Filters</a>
+                                                </p>
+                                                <div class="collapse" id="collapseFilters">
+                                                    <div class="card card-body mb-3">
+                                                        <div id="parameter_instruments_filters">
+                                                            <div id="parameter_instruments_filter">
+                                                                <div class="card card-body mb-3 border border-black">
+                                                                    {{ form.filter_x_type|as_crispy_field }}
+                                                                    {{ form.filter_x_place|as_crispy_field }}
+                                                                    {{ form.filter_x_center|as_crispy_field }}
+                                                                    {{ form.filter_x_width|as_crispy_field }}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <btn class="col-6 btn btn-success mx-auto addCoordinates" section="yes" parent="parameter_instruments_filters" original="parameter_instruments_filter">Add Filter</btn>
+                                                    </div>
+                                                </div>
+                                                {{ form.spectral_x_comments|as_crispy_field }}
+                                            </div>
+                                        </div>
+                                <p>
+                                    <a class="btn btn-success mx-auto" data-toggle="collapse" href="#collapseAngle" role="button"
+                                        aria-expanded="false" aria-controls="collapseAngle">Angle</a>
+                                </p>
+                                <div class="collapse" id="collapseAngle">
+                                    <div class="card card-body mb-3">
+                                        {{ form.angle_x_observation_geometry|as_crispy_field }}
+                                        {{ form.angle_x_observation_mode|as_crispy_field }}
+                                        {{ form.angle_x_incidence|as_crispy_field }}
+                                        {{ form.angle_x_emergence|as_crispy_field }}
+                                        {{ form.angle_x_azimuth|as_crispy_field }}
+                                        {{ form.angle_x_phase|as_crispy_field }}
+                                        {{ form.angle_x_resolution_illumination|as_crispy_field }}
+                                        {{ form.angle_x_resolution_observation|as_crispy_field }}
+                                        {{ form.angle_x_comments|as_crispy_field }}
+                                    </div>
+                                </div>
+
+                                <p>
+                                    <a class="btn btn-success mx-auto" data-toggle="collapse" href="#collapsePolarization" role="button"
+                                        aria-expanded="false" aria-controls="collapsePolarization">Polarization</a>
+                                </p>
+                                <div class="collapse" id="collapsePolarization">
+                                    <div class="card card-body mb-3">
+                                        {{ form.polarization_x_type_illumination|as_crispy_field }}
+                                        {{ form.polarization_x_type_observation|as_crispy_field }}
+                                        {{ form.polarization_x_polarizer_illumination|as_crispy_field }}
+                                        {{ form.polarization_x_polarizer_observation|as_crispy_field }}
+                                        {{ form.polarization_x_rejection_illumination|as_crispy_field }}
+                                        {{ form.polarization_x_rejection_observation|as_crispy_field }}
+                                        {{ form.polarization_x_angle_illumination|as_crispy_field }}
+                                        {{ form.polarization_x_angle_observation|as_crispy_field }}
+                                        {{ form.polarization_x_comments|as_crispy_field }}
+                                    </div>
+                                </div>
+
+                                <p>
+                                    <a class="btn btn-success mx-auto" data-toggle="collapse" href="#collapseSpatial" role="button"
+                                        aria-expanded="false" aria-controls="collapseSpatial">Spatial</a>
+                                </p>
+                                <div class="collapse" id="collapseSpatial">
+                                    <div class="card card-body mb-3">
+                                        {{ form.spatial_x_observation_mode|as_crispy_field }}
+                                        {{ form.spatial_x_unit|as_crispy_field }}
+                                        {{ form.spatial_x_objective|as_crispy_field }}
+                                        {{ form.spatial_x_spots_number|as_crispy_field }}
+                                        {{ form.spatial_x_sampling_x|as_crispy_field }}
+                                        {{ form.spatial_x_sampling_y|as_crispy_field }}
+                                        {{ form.spatial_x_measures_x|as_crispy_field }}
+                                        {{ form.spatial_x_measures_y|as_crispy_field }}
+                                        {{ form.spatial_x_extent_x|as_crispy_field }}
+                                        {{ form.spatial_x_extent_y|as_crispy_field }}
+
+                                        <p>
+                                            <a class="btn btn-danger mx-auto" data-toggle="collapse" href="#collapseResolutions" role="button"
+                                                aria-expanded="false" aria-controls="collapseResolutions">Resolutions</a>
+                                        </p>
+                                        <div class="collapse" id="collapseResolutions">
+                                            <div class="card card-body mb-3">
+                                                <div id="parameter_instruments_resolutions">
+                                                    <div id="parameter_instruments_resolution">
+                                                        <div class="card card-body mb-3 border border-black">
+                                                            {{ form.resolution_x_width|as_crispy_field }}
+                                                            {{ form.resolution_x_width_error|as_crispy_field }}
+                                                            {{ form.resolution_x_position|as_crispy_field }}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <btn class="col-6 btn btn-success mx-auto addCoordinates" section="yes" parent="parameter_instruments_resolutions" original="parameter_instruments_resolution">Add Resolution</btn>
+                                            </div>
+                                        </div>
+                                        {{ form.spatial_x_comments|as_crispy_field }}
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                        <btn class="col-6 btn btn-success mx-auto addSection" parent="parameter_instruments" original="parameter_instrument">Add Parameter Instruments</btn>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div id="form-experiment-comments">
+                    <div class="row">
+                        <a class="btn btn-primary mx-3 mb-4" data-toggle="collapse" href="#collapseExperimentComments" role="button"
+                            aria-expanded="false" aria-controls="collapseExperimentComments">Experiment Comments</a>
+                    </p>
+                    <div class="collapse" id="collapseExperimentComments">
+                        <div class="card card-body mb-3">
+                            {{ form.experiment_x_comments|as_crispy_field }}
+                        </div>
+                    </div>
+                </div>
+
+                <div id="form-preview">
+                    <div class="row">
+                        <a class="btn btn-primary mx-3 mb-4" data-toggle="collapse" href="#collapsePreview" role="button"
+                            aria-expanded="false" aria-controls="collapsePreview">Preview</a>
+                    </div>
+                    <div class="collapse" id="collapsePreview">
+                        <div class="card card-body mb-3">
+                            {{ form.preview_x_x|as_crispy_field }}
+                            {{ form.preview_x_y|as_crispy_field }}
+                            {{ form.preview_x_y2|as_crispy_field }}
+                            {{ form.preview_x_filename|as_crispy_field }}
+                                
+                        </div>
+                    </div>
+                </div>
+
+                <div id="form-images">
+                    <div class="row">
+                        <a class="btn btn-primary mx-3 mb-4" data-toggle="collapse" href="#collapseImages" role="button"
+                            aria-expanded="false" aria-controls="collapseImages">Images</a>
+                    </div>
+                    <div class="collapse" id="collapseImages">
+                        <div class="card card-body mb-3">
+                            <div id="images">
+                                <div id="image">
+                                    <div class="card card-body mb-3 border border-black">
+                                        {{ form.image_x_filename|as_crispy_field }}
+                                        {{ form.image_x_caption|as_crispy_field }}
+                                    </div>
+                                </div>
+                            </div>
+                            <btn class="col-6 btn btn-success mx-auto addCoordinates" section="yes" parent="images" original="image">Add Image</btn>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="form-documentations">
+                    <div class="row">
+                        <a class="btn btn-primary mx-3 mb-4" data-toggle="collapse" href="#collapseDocumentations" role="button"
+                            aria-expanded="false" aria-controls="collapseDocumentations">Documentations</a>
+                    </div>
+                    <div class="collapse" id="collapseDocumentations">
+                        <div class="card card-body mb-3">
+                            <div id="documentations">
+                                <div id="documentation">
+                                    <div class="card card-body mb-3 border border-black">
+                                        {{ form.documentation_x_name|as_crispy_field }}
+                                        {{ form.documentation_x_filename|as_crispy_field }}
+                                    </div>
+                                </div>
+                            </div>
+                            <btn class="col-6 btn btn-success mx-auto addCoordinates" section="yes" parent="documentations" original="documentation">Add Documentation</btn>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="form-publications">
+                    <div class="row">
+                        <a class="btn btn-primary mx-3 mb-4" data-toggle="collapse" href="#collapsePublications" role="button"
+                            aria-expanded="false" aria-controls="collapsePublications">Publications</a>
+                    </div>
+                    <div class="collapse" id="collapsePublications">
+                        <div class="card card-body mb-3">
+                            <div class="card card-body mb-3">
+                                <div id="publication_uid">
+                                {{ form.publications_x_publication_uid|as_crispy_field }}
+                                </div>
+                                <btn class="col-6 btn btn-success mx-auto addCoordinates" section="no" parent="publication_uid" original="publication_uid">Add Publication UID</btn>
+                            </div>
+                        </div>
+                        {{ form.experiment_x_publication_comments|as_crispy_field }}
+                    </div>
+                </div>
+
+                <div id="form-sponsors">
+                    <div class="row">
+                        <a class="btn btn-primary col-2 mx-3 mb-4" data-toggle="collapse" href="#collapseSponsors" role="button"
+                            aria-expanded="false" aria-controls="collapseSponsors">Sponsors</a>
+                    </div>
+                    <div class="collapse" id="collapseSponsors">
+                        <div class="card card-body mb-3">
+                            <div id="sponsors">
+                                <div id="sponsor">
+                                    <div class="card card-body mb-3 border border-black">
+                                        {{ form.sponsor_x_acronym|as_crispy_field }}
+                                        {{ form.sponsor_x_name|as_crispy_field }}
+                                        {{ form.sponsor_x_award|as_crispy_field }}
+                                    </div>
+                                </div>
+                            </div>
+                            <btn class="col-6 btn btn-success mx-auto addCoordinates" section="yes" parent="sponsors" original="sponsor">Add Sponsor</btn>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="form-spectra">
+                    <div class="row">
+                        <a class="btn btn-primary col-2 mx-3 mb-4" data-toggle="collapse" href="#collapseSpectra" role="button"
+                            aria-expanded="false" aria-controls="collapseSpectra">Spectra</a>
+                    </div>
+                    <div class="collapse" id="collapseSpectra">
+                        <div class="card card-body mb-3">
+                            <div id="spectra">
+                                <div id="spectrum">
+                                    <p>
+                                        <a class="btn btn-success mx-auto" data-toggle="collapse" href="#collapseSpectrum" role="button"
+                                            aria-expanded="false" aria-controls="collapseSpectrum">Spectrum</a>
+                                    </p>
+                                    <div class="collapse" id="collapseSpectrum">
+                                        <div class="card card-body mb-3 border border-black">
+                                            {{ form.spectrum_x_import_mode|as_crispy_field }}
+                                            {{ form.spectrum_x_uid|as_crispy_field }}
+                                            {{ form.spectrum_x_experiment_type|as_crispy_field }}
+                                            {{ form.spectrum_x_chronologically_ordered|as_crispy_field }}
+                                            {{ form.spectrum_x_previous_spectrum_uid|as_crispy_field }}
+                                            {{ form.spectrum_x_title|as_crispy_field }}
+                                            {{ form.spectrum_x_type|as_crispy_field }}
+                                            {{ form.spectrum_x_intensity_unit|as_crispy_field }}
+                                            {{ form.spectrum_x_reference_position|as_crispy_field }}
+                        
+                                            <p>
+                                                <a class="btn btn-danger mx-auto" data-toggle="collapse" href="#collapseReferenceSpectra"
+                                                    role="button" aria-expanded="false" aria-controls="collapseReferenceSpectra">Reference Spectra</a>
+                                            </p>
+                                            <div class="collapse" id="collapseReferenceSpectra">
+                                                <div class="card card-body mb-3">
+                                                    <div id="spectrum_uids">
+                                                        <div id="spectrum_uid">
+                                                        {{ form.reference_spectra_x_spectrum_uid|as_crispy_field }}
+                                                        </div>
+                                                    </div>
+                                                    <btn class="col-6 btn btn-success mx-auto addCoordinates" section="no" parent="spectrum_uids" original="spectrum_uid">Add Publication UID</btn>
+                                                </div>
+                                            </div>
+                        
+                                            {{ form.spectrum_x_model_parameters|as_crispy_field }}
+                        
+                                            <p>
+                                                <a class="btn btn-danger mx-auto" data-toggle="collapse" href="#collapseSample" role="button"
+                                                    aria-expanded="false" aria-controls="collapseSample">Sample</a>
+                                            </p>
+                                            <div class="collapse" id="collapseSample">
+                                                <div class="card card-body mb-3">
+                                                    {{ form.sample_x_uid|as_crispy_field }}
+                                                    {{ form.sample_x_changes|as_crispy_field }}
+                                                    {{ form.sample_x_comments|as_crispy_field }}
+                                                    <p>
+                                                        <a class="btn btn-warning mx-auto" data-toggle="collapse"
+                                                            href="#collapsePrimaryConstituents" role="button" aria-expanded="false"
+                                                            aria-controls="collapsePrimaryConstituents">Primary Constituents</a>
+                                                    </p>
+                                                    <div class="collapse" id="collapsePrimaryConstituents">
+                                                        <div class="card card-body mb-3">
+                                                            <div id="primaryConstituents">
+                                                                <div id="primaryConstituent">
+                                                                    <div class="card card-body mb-3 border border-black">
+                                                                        {{ form.primary_constituent_x_constituent_uid|as_crispy_field }}
+                                                                        {{ form.primary_constituent_x_constituent_comments|as_crispy_field }}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <btn class="col-6 btn btn-success mx-auto addCoordinates" section="yes" parent="primaryConstituents" original="primaryConstituent">Add Primary Constituent</btn>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                        
+                                            <p>
+                                                <a class="btn btn-danger mx-auto" data-toggle="collapse" href="#collapseParametersInstruments"
+                                                    role="button" aria-expanded="false" aria-controls="collapseParametersInstruments">Parameters Instruments</a>
+                                            </p>
+                                            <div class="collapse" id="collapseParametersInstruments">
+                                                
+                                                <div class="card card-body mb-3">
+                                                    <div id="spectrum_parameter_instruments">
+                                                        <div id="spectrum_parameter_instrument">
+                                                            <p>
+                                                                <a class="btn btn-warning mx-auto" data-toggle="collapse"
+                                                                    href="#collapseParametersInstrument" role="button" aria-expanded="false"
+                                                                    aria-controls="collapseParametersInstrument">Parameters Instrument</a>
+                                                            </p>
+                                                            <div class="collapse" id="collapseParametersInstrument">
+                                                                <div class="card card-body mb-3 border border-black">
+                                                                    {{ form.parameters_instrument_x_instrument_uid|as_crispy_field }}
+                                                                    <div class="card card-body mb-3">
+                                                                        <p>
+                                                                            <a class="btn btn-secondary mx-auto" data-toggle="collapse"
+                                                                                href="#collapseRanges" role="button" aria-expanded="false"
+                                                                                aria-controls="collapseRanges">Ranges</a>
+                                                                        </p>
+                                                                        <div class="collapse" id="collapseRanges">
+                                                                            <div class="card card-body mb-3">
+                                                                                <div id="spectrum_parameter_ranges">
+                                                                                    <div id="spectrum_parameter_range">
+                                                                                        <div class="card card-body mb-3 border border-black">
+                                                                                            {{ form.range_x_min|as_crispy_field }}
+                                                                                            {{ form.range_x_max|as_crispy_field }}
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <btn class="col-6 btn btn-success mx-auto addCoordinates" section="yes" parent="spectrum_parameter_ranges" original="spectrum_parameter_range">Add Range</btn>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <btn class="col-6 btn btn-success mx-auto addCoordinates" section="yes" parent="spectrum_parameter_instruments" original="spectrum_parameter_instrument">Add Parameter Instrument</btn>
+                                                </div>
+                                            </div>
+                        
+                                            {{ form.spectrum_x_date_begin|as_crispy_field }}
+                                            {{ form.spectrum_x_time_begin|as_crispy_field }}
+                                            {{ form.spectrum_x_date_end|as_crispy_field }}
+                                            {{ form.spectrum_x_time_end|as_crispy_field }}
+                        
+                                            <p>
+                                                <a class="btn btn-danger mx-auto" data-toggle="collapse" href="#collapsePreviousVersion"
+                                                    role="button" aria-expanded="false" aria-controls="collapsePreviousVersion">Previous Version</a>
+                                            </p>
+                                            <div class="collapse" id="collapsePreviousVersion">
+                                                <div class="card card-body mb-3">
+                        
+                                                    {{ form.previous_version_x_status|as_crispy_field }}
+                                                    {{ form.previous_version_x_comments|as_crispy_field }}
+                                                    {{ form.previous_version_x_new_spectrum_uid|as_crispy_field }}
+                        
+                                                </div>
+                                            </div>
+                        
+                                            {{ form.spectrum_x_history|as_crispy_field }}
+                                            {{ form.spectrum_x_analysis|as_crispy_field }}
+                                            {{ form.spectrum_x_quality_flag|as_crispy_field }}
+                        
+                                            <p>
+                                                <a class="btn btn-danger mx-auto" data-toggle="collapse" href="#collapseValidators"
+                                                    role="button" aria-expanded="false" aria-controls="collapseValidators">Validators</a>
+                                            </p>
+                                            <div class="collapse" id="collapseValidators">
+                                                <div class="card card-body mb-3">
+                        
+                                                    {{ form.validators_x_experimentalist_uid|as_crispy_field }}
+                        
+                                                </div>
+                                            </div>
+                        
+                                            {{ form.spectrum_x_comments|as_crispy_field }}
+                        
+                                            <p>
+                                                <a class="btn btn-danger mx-auto" data-toggle="collapse" href="#collapsePublications"
+                                                    role="button" aria-expanded="false" aria-controls="collapsePublications">Publications</a>
+                                            </p>
+                                            <div class="collapse" id="collapsePublications">
+                                                <div class="card card-body mb-3">
+                        
+                                                    {{ form.publications_x_publication_uid|as_crispy_field }}
+                        
+                                                </div>
+                                            </div>
+                        
+                                            {{ form.spectrum_x_publication_comments|as_crispy_field }}
+                        
+                                            <p>
+                                                <a class="btn btn-danger mx-auto" data-toggle="collapse" href="#collapseFiles" role="button"
+                                                    aria-expanded="false" aria-controls="collapseFiles">Files</a>
+                                            </p>
+                                            <div class="collapse" id="collapseFiles">
+                                                <div class="card card-body mb-3">
+                        
+                                                    <p>
+                                                        <a class="btn btn-warning mx-auto" data-toggle="collapse" href="#collapseParameter"
+                                                            role="button" aria-expanded="false" aria-controls="collapseParameter">Parameter</a>
+                                                    </p>
+                                                    <div class="collapse" id="collapseParameter">
+                                                        <div class="card card-body mb-3">
+                                                            {{ form.parameter_x_type|as_crispy_field }}
+                                                            {{ form.parameter_x_format|as_crispy_field }}
+                                                            {{ form.parameter_x_header_lines_number|as_crispy_field }}
+                                                        </div>
+                                                    </div>
+                        
+                                                    <p>
+                                                        <a class="btn btn-warning mx-auto" data-toggle="collapse" href="#collapseFile"
+                                                            role="button" aria-expanded="false" aria-controls="collapseFile">File</a>
+                                                    </p>
+                                                    <div class="collapse" id="collapseFile">
+                                                        <div class="card card-body mb-3">
+                                                            {{ form.file_x_filename|as_crispy_field }}
+                                                        </div>
+                                                    </div>
+                        
+                                                </div>
+                                            </div>
+                        
+                                            {{ form.spectrum_x_export_filename|as_crispy_field }}
+                        
+                                            <p>
+                                                <a class="btn btn-danger mx-auto" data-toggle="collapse" href="#collapseExperimentPreview"
+                                                    role="button" aria-expanded="false" aria-controls="collapseExperimentPreview">Experiment Preview</a>
+                                            </p>
+                                            <div class="collapse" id="collapseExperimentPreview">
+                                                <div class="card card-body mb-3">
+                                                    {{ form.experiment_x_preview_flag|as_crispy_field }}
+                                                </div>
+                                            </div>
+                        
+                                            <p>
+                                                <a class="btn btn-danger mx-auto" data-toggle="collapse" href="#collapseBands" role="button"
+                                                    aria-expanded="false" aria-controls="collapseBands">Bands</a>
+                                            </p>
+                                            <div class="collapse" id="collapseBands">
+                                                <div class="card card-body mb-3">
+                                                    <p>
+                                                        <a class="btn btn-warning mx-auto" data-toggle="collapse" href="#collapseBand"
+                                                            role="button" aria-expanded="false" aria-controls="collapseBand">Band</a>
+                                                    </p>
+                                                    <div class="collapse" id="collapseBand">
+                                                        <div class="card card-body mb-3">
+                                                            {{ form.band_x_position_min|as_crispy_field }}
+                                                            {{ form.band_x_position_peak|as_crispy_field }}
+                                                            {{ form.band_x_position_max|as_crispy_field }}
+                                                            {{ form.band_x_peak_intensity_relative|as_crispy_field }}
+                                                            {{ form.band_x_primary_constituent_uid|as_crispy_field }}
+                                                            {{ form.band_x_primary_specie_uid|as_crispy_field }}
+                                                            <p>
+                                                                <a class="btn btn-info mx-auto" data-toggle="collapse"
+                                                                    href="#collapseTransitionChemicalBonds" role="button" aria-expanded="false"
+                                                                    aria-controls="collapseTransitionChemicalBonds">Transition Chemical Bonds</a>
+                                                            </p>
+                                                            <div class="collapse" id="collapseTransitionChemicalBonds">
+                                                                <div class="card card-body mb-3">
+                                                                    {{ form.transition_chemical_bonds_x_chemical_bond_uid|as_crispy_field }}
+                                                                </div>
+                                                            </div>
+                                                            {{ form.band_x_transition_assignment|as_crispy_field }}
+                                                            {{ form.band_x_vibration_mode|as_crispy_field }}
+                                                            {{ form.band_x_rotation_mode|as_crispy_field }}
+                                                            {{ form.band_x_phonon_mode|as_crispy_field }}
+                                                            {{ form.band_x_label|as_crispy_field }}
+                                                            {{ form.band_x_comments|as_crispy_field }}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                        
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <btn class="col-6 btn btn-success mx-auto addSection" parent="spectra" original="spectrum">Add Spectrum</btn>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn contact-btn m-4" data-toggle="modal" data-target="message"
+                    type="submit">Send</button>
+
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block postloadjs %}
+    {{ block.super }}
+    <script>
+        var uploaded_data = '{{ uploaded_data|safe }}';
+        var researcher = '{{ profile.experimentalist_uid }}';
+        var sessionArray = '{{session_json|safe}}';
+    </script>
+    <script type="text/javascript" src="{% static 'frontend/js/auto_fill.js' %}"></script>
+    <script>
+        function experimentFunction() {
+            var experimentFullForm = document.getElementById("experimentFullForm");
+            // experimentFullForm.click();
+
+            check_boxes = ["introCheck", "expCheck",
+                            "geolocationsCheck",
+                            "experimentVariables", "parametersInstrCheck", "experimentComments",
+                           "previewCheck", "imagesCheck", "documentationsCheck", "publicationsCheck", "sponsorsCheck", "spectraCheck"]
+
+            form_names = ["form-intro", "form-exp",
+                          "form-geolocations",
+                          "form-experiment-variables", "form-parameters-instr",
+                          "form-experiment-comments", "form-preview", "form-images", "form-documentations", "form-publications",
+                          "form-sponsors", "form-spectra"]
+
+            if (experimentFullForm.checked) {
+                for(let i = 0; i < check_boxes.length; i++) {
+                    document.getElementById(form_names[i]).style.display = "block";
+                    document.getElementById(check_boxes[i]).disabled = true;
+                }
+            } else {
+                for(let i = 0; i < check_boxes.length; i++) {
+                    document.getElementById(check_boxes[i]).disabled = false;
+                    if (document.getElementById(check_boxes[i]).checked == true) {
+                        document.getElementById(form_names[i]).style.display = "block";
+                    } else {
+                        document.getElementById(form_names[i]).style.display = "none";
+                    }
+                }
+            }
+        }
+    </script>
+{% endblock %}

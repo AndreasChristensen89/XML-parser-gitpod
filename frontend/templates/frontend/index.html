@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block page_header %}
+<div class="container header-container">
+    <div class="container-header"></div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+<div class="row">
+    <div id="hero-background" aria-label="Abstract picture of a city view. White background, grey and black building">
+
+        <div class="row mb-5 cover-text">
+            <div class="col-10 pt-5 pb-3 mx-auto text-white">
+                <h1 class="h1 pt-4 text-center">
+                    REAP
+                    <hr>
+                </h1>
+                <h2 class="lead text-center">Database Fun</h2>
+            </div>
+        </div>
+
+        {% if user.is_authenticated %}
+
+        <div class="row cover-text">
+
+            <div class="col-4 col-md-5 col-lg-3 my-2 mx-auto text-center text-white border border-white rounded animation first-div hover">
+                <a href="{% url 'frontend:insert_publication' %}">
+                    <h2 class="text-white">PUBLICATION</h2>
+                </a>
+            </div>
+
+            <div class="col-4 col-md-5 col-lg-3 my-2 mx-auto text-center text-white border border-white rounded animation second-div hover">
+                <a href="{% url 'frontend:add_experiment_intro' %}">
+                    <h2 class="text-white">EXPERIMENT</h2>
+                </a>
+            </div>
+
+            <div class="col-4 col-md-5 col-lg-3 my-2 mx-auto text-center text-white border border-white rounded animation third-div hover">
+                <a href="{% url 'frontend:insert_sample' %}">
+                    <h2 class="text-white">SAMPLE</h2>
+                </a>
+            </div>
+
+        </div>
+
+        {% else %}
+
+        <div class="row cover-text">
+
+            <div class="col-8 col-md-5 col-lg-3 my-2 mx-auto text-center text-white border border-white rounded animation third-div hover">
+                <a href="{% url 'account_login' %}">
+                    <h2 class="text-white">LOGIN</h2>
+                </a>
+            </div>
+            
+            <div class="col-8 col-md-5 col-lg-3 my-2 mx-auto text-center text-white border border-white rounded animation first-div hover">
+                <a href="{% url 'account_signup' %}">
+                    <h2 class="text-white">REGISTER</h2>
+                </a>
+            </div>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 mx-auto text-center text-white p-5 index-intro">
+        <h3 class="h3 my-5">WE'LL MAKE IT EASY TO GET STUFF DONE</h3>
+        <h3 class="h3">YOU'LL SEE!</h3>
+        <h3 class="h3 my-5">IT'S GONNA BE FANTASTIC!</h3>
+        <h3 class="h3 my-5">SIGN UP AND INTERACT WITH OUR PARSER</h3>
+    </div>
+</div>
+
+<div class="row">
+    <a class="col-6 border border-white intro-content position-relative first-div" href="{% url 'frontend:contact' %}">
+        <h3 class="h3 text-white centered">Contact</h3>
+    </a>
+    <a class="col-6 border border-white text-dark intro-content position-relative fourth-div" href="#">
+        <h3 class="h3 centered">About</h3>
+    </a>
+</div>
+
+</div>
+
+{% endblock %}
+
+

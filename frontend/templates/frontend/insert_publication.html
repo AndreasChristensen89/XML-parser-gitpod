@@ -1,0 +1,370 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block page_header %}
+<div class="container header-container">
+    <div class="container-header"></div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-10 py-5 pb-2 mx-auto text-center">
+            <h1 class="h1 mx-auto rounded contact-heading">
+                Insert Publication
+            </h1>
+        </div>
+    </div>
+
+    <div class="row my-5">
+        <div class="col-12 mx-auto text-center">
+            <a class="text-center border border-black p-2 bg-info" href="{% url 'frontend:upload_publication' %}">Upload document to fill in</a>
+        </div>
+    </div>
+
+    <div id="clearPublicationData" class="row my-5">
+        <div class="col-12 mx-auto text-center">
+            <a class="border border-black bg-danger text-center p-2" href="{% url 'frontend:clear_publication_data' %}">Clear uploaded publication data</a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-10 col-md-8 mx-auto mt-3 mb-5 p-4 first-div border rounded">
+            <form id="form" method="post">
+
+                {% csrf_token %}
+                <div id="publication_sections">
+                    <div id="publication_section">
+                    
+                    <div class="row text-center">
+                        <div class="col mb-3">
+                        <a class="btn btn-primary" data-toggle="collapse" href="#collapsePublication" role="button" aria-expanded="false"
+                            aria-controls="collapsePublication">
+                            Publication
+                        </a>
+                        </div>
+                    </div>
+                    <div class="collapse" id="collapsePublication">
+                        <div id="form-intro">
+                            <div class="card card-body mb-3">
+                                {{ form.publication_x_import_mode|as_crispy_field }}
+                                {{ form.publication_x_uid|as_crispy_field }}
+                                {{ form.publication_x_type|as_crispy_field }}
+                                {{ form.publication_x_document_type|as_crispy_field }}
+                                {{ form.publication_x_state|as_crispy_field }}
+                                {{ form.publication_x_access_right|as_crispy_field }}
+                                {{ form.publication_x_access_free_date|as_crispy_field }}
+                            </div>
+                        </div>
+
+                        <div id="form-author">
+                            <p>
+                                <a class="btn btn-primary mx-auto" data-toggle="collapse" href="#collapseAuthors" role="button"
+                                    aria-expanded="false" aria-controls="collapseAuthors">
+                                    Authors
+                                </a>
+                            </p>
+                            <div class="collapse" id="collapseAuthors">
+                                <div class="bg-white rounded" id="publication_authors">
+                                    <div id="publication_author">
+                                        <div class="card card-body bg-white">
+                                            <div class="card card-body border border-black">
+                                                {{ form.author_x_first_name|as_crispy_field }}
+                                                {{ form.author_x_family_name|as_crispy_field }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row my-3">
+                                    <btn class="btn btn-success mx-auto addfields_button" parent="publication_authors" child="publication_author" onclick="addFields(event)"><i class="fa fa-plus-circle" aria-hidden="true"></i> Author</btn>
+                                    <btn class="btn btn-danger mx-auto removefields_hover removefields_button" id="remove_publication_authors" parent="publication_authors" onclick="removeFields(event)"><i class="fa fa-trash" aria-hidden="true"></i> Author</btn>
+                                </div>
+                            </div>
+                            
+                        </div>
+                        
+                        <div id="form-publication">
+                            <p>
+                                <a class="btn btn-primary mx-auto" data-toggle="collapse" href="#collapsePublicationContinued" role="button"
+                                    aria-expanded="false" aria-controls="collapsePublicationContinued">
+                                    Publication Continued
+                                </a>
+                            </p>
+                            <div class="collapse" id="collapsePublicationContinued">
+                                <div class="card card-body mb-3">
+                                    {{ form.publication_x_year|as_crispy_field }}
+                                    {{ form.publication_x_title|as_crispy_field }}
+                                    {{ form.publication_x_journal|as_crispy_field }}
+                                    {{ form.publication_x_volume|as_crispy_field }}
+                                    {{ form.publication_x_number|as_crispy_field }}
+                                    {{ form.publication_x_first_page|as_crispy_field }}
+                                    {{ form.publication_x_last_page|as_crispy_field }}
+                                    {{ form.publication_x_pages_number|as_crispy_field }}
+                                    {{ form.publication_x_abstract|as_crispy_field }}
+
+                                    <p>
+                                        <a class="btn btn-primary mx-auto" data-toggle="collapse" href="#collapseKeywords" role="button"
+                                            aria-expanded="false" aria-controls="collapseKeywords">
+                                            Keywords
+                                        </a>
+                                    </p>
+                                    <div class="collapse" id="collapseKeywords">
+                                        <div id="publication_keywords">
+                                            <div class="mb-2" id="publication_keyword">
+                                                <div class="card card-body border border-black">
+                                                    {{ form.keywords_x_keyword|as_crispy_field }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row my-3">
+                                            <btn class="btn btn-success mx-auto addfields_button" parent="publication_keywords" child="publication_keyword" onclick="addFields(event)"><i class="fa fa-plus-circle" aria-hidden="true"></i> Keyword</btn>
+                                            <btn class="btn btn-danger mx-auto removefields_hover removefields_button" id="remove_publication_keywords" parent="publication_keywords" onclick="removeFields(event)"><i class="fa fa-trash" aria-hidden="true"></i> Keyword</btn> 
+                                        </div>
+                                    </div>
+
+                                    <p>
+                                        <a class="btn btn-primary mx-auto" data-toggle="collapse" href="#collapseConferences" role="button"
+                                            aria-expanded="false" aria-controls="collapseConferences">
+                                            Conferences
+                                        </a>
+                                    </p>
+                                    <div class="collapse" id="collapseConferences">
+                                        <div class="card card-body mb-3">
+                                            {{ form.conference_x_name|as_crispy_field }}
+                                            {{ form.conference_x_location|as_crispy_field }}
+                                            {{ form.conference_x_date|as_crispy_field }}
+                                        </div>
+                                    </div>
+
+                                    <p>
+                                        <a class="btn btn-primary mx-auto" data-toggle="collapse" href="#collapseBook" role="button"
+                                            aria-expanded="false" aria-controls="collapseBook">
+                                            Book
+                                        </a>
+                                    </p>
+                                    <div class="collapse" id="collapseBook">
+                                        <div class="card card-body mb-3">
+                                            {{ form.book_x_chapter_number|as_crispy_field }}
+                                            {{ form.book_x_title|as_crispy_field }}
+                                            {{ form.book_x_series|as_crispy_field }}
+                                            {{ form.book_x_edition_number|as_crispy_field }}
+                                        </div>
+                                    </div>
+
+                                    {{ form.publication_x_editor|as_crispy_field }}
+                                    {{ form.publication_x_publisher|as_crispy_field }}
+                                    {{ form.publication_x_publisher_city|as_crispy_field }}
+
+                                    <p>
+                                        <a class="btn btn-primary mx-auto" data-toggle="collapse" href="#collapseDataset" role="button"
+                                            aria-expanded="false" aria-controls="collapseDataset">
+                                            Dataset
+                                        </a>
+                                    </p>
+                                    <div class="collapse" id="collapseDataset">
+                                        <div class="card card-body mb-3">
+                                            {{ form.dataset_x_database_name|as_crispy_field }}
+                                            {{ form.dataset_x_database_url|as_crispy_field }}
+                                        </div>
+                                    </div>
+
+                                    {{ form.publication_x_doi|as_crispy_field }}
+
+
+                                    <p>
+                                        <a class="btn btn-primary mx-auto" data-toggle="collapse" href="#collapseIdentifiers" role="button"
+                                            aria-expanded="false" aria-controls="collapseIdentifiers">
+                                            Identifiers
+                                        </a>
+                                    </p>
+                                    
+                                    <div class="collapse" id="collapseIdentifiers">
+                                        <div id="publication_identifiers">
+                                            <div id="publication_identifier">
+                                                <div class="card card-body border border-black mb-2">
+                                                    {{ form.identifier_x_type|as_crispy_field }}
+                                                    {{ form.identifier_x_code|as_crispy_field }}
+                                                    {{ form.identifier_x_url|as_crispy_field }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row my-3">
+                                            <btn class="btn btn-success mx-auto addfields_button" parent="publication_identifiers" child="publication_identifier" onclick="addFields(event)"><i class="fa fa-plus-circle" aria-hidden="true"></i> Identifier</btn>
+                                            <btn class="btn btn-danger mx-auto removefields_hover removefields_button" id="remove_publication_identifiers" parent="publication_identifiers" onclick="removeFields(event)"><i class="fa fa-trash" aria-hidden="true"></i> Identifier</btn> 
+                                        </div>
+                                    </div>
+
+                                    {{ form.publication_x_filename|as_crispy_field }}
+                                    
+                                    
+                                    <p>
+                                        <a class="btn btn-primary mx-auto" data-toggle="collapse" href="#collapseContents" role="button"
+                                            aria-expanded="false" aria-controls="collapseContents">
+                                            Contents
+                                        </a>
+                                    </p>
+
+                                    <div class="collapse" id="collapseContents">
+                                        <div id="publication_contents">
+                                            <div class="mb-2" id="publication_content">
+                                                <div class="card card-body border border-black">
+                                                    {{ form.contents_x_content|as_crispy_field }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row my-3">
+                                            <btn class="btn btn-success mx-auto addfields_button" parent="publication_contents" child="publication_content" onclick="addFields(event)"><i class="fa fa-plus-circle" aria-hidden="true"></i> Content</btn>
+                                            <btn class="btn btn-danger mx-auto removefields_hover removefields_button" id="remove_publication_contents" parent="publication_contents" onclick="removeFields(event)"><i class="fa fa-trash" aria-hidden="true"></i> Content</btn> 
+                                        </div>
+                                    </div>
+
+                                    <p>
+                                        <a class="btn btn-primary mx-auto" data-toggle="collapse" href="#collapseCitedPublications" role="button"
+                                            aria-expanded="false" aria-controls="collapseCitedPublications">
+                                            Cited Publications
+                                        </a>
+                                    </p>
+                                    <div class="collapse" id="collapseCitedPublications">
+                                        <div id="publication_cited_publications">
+                                            <div class="mb-2" id="publication_cited_publication">
+                                                <div class="card card-body border border-black">
+                                                    {{ form.cited_publications_x_publication_uid|as_crispy_field }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row my-3">
+                                            <btn class="btn btn-success mx-auto addfields_button" parent="publication_cited_publications" child="publication_cited_publication" onclick="addFields(event)"><i class="fa fa-plus-circle" aria-hidden="true"></i> Publication</btn>
+                                            <btn class="btn btn-danger mx-auto removefields_hover removefields_button" id="remove_publication_cited_publications" parent="publication_cited_publications" onclick="removeFields(event)"><i class="fa fa-trash" aria-hidden="true"></i> Publication</btn> 
+                                        </div>
+                                    </div>
+
+                                    <p>
+                                        <a class="btn btn-primary mx-auto" data-toggle="collapse" href="#collapseUsedExperiments" role="button"
+                                            aria-expanded="false" aria-controls="collapseUsedExperiments">
+                                            Used Experiments
+                                        </a>
+                                    </p>
+                                    <div class="collapse" id="collapseUsedExperiments">
+                                        <div id="publication_used_experiments">
+                                            <div class="mb-2" id="publication_used_experiment">
+                                                <div class="card card-body border border-black">
+                                                    {{ form.used_experiments_x_experiment_uid|as_crispy_field }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row my-3">
+                                            <btn class="btn btn-success mx-auto addfields_button" parent="publication_used_experiments" child="publication_used_experiment" onclick="addFields(event)"><i class="fa fa-plus-circle" aria-hidden="true"></i> Used Experiment</btn>
+                                            <btn class="btn btn-danger mx-auto removefields_hover removefields_button" id="remove_publication_used_experiments" parent="publication_used_experiments" onclick="removeFields(event)"><i class="fa fa-trash" aria-hidden="true"></i> Used Experiment</btn> 
+                                        </div>
+                                    </div>
+
+                                    <p>
+                                        <a class="btn btn-primary mx-auto" data-toggle="collapse" href="#collapseUsedBandLists" role="button"
+                                            aria-expanded="false" aria-controls="collapseUsedBandLists">
+                                            Used Bandlists
+                                        </a>
+                                    </p>
+                                    <div class="collapse" id="collapseUsedBandLists">
+                                        <div id="publication_used_bandlists">
+                                            <div class="mb-2" id="publication_used_bandlist">
+                                                <div class="card card-body border border-black">
+                                                    {{ form.used_bandlists_x_bandlist_uid|as_crispy_field }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row my-3">
+                                            <btn class="btn btn-success mx-auto addfields_button" parent="publication_used_bandlists" child="publication_used_bandlist" onclick="addFields(event)"><i class="fa fa-plus-circle" aria-hidden="true"></i> Used Bandlist</btn>
+                                            <btn class="btn btn-danger mx-auto removefields_hover removefields_button" id="remove_publication_used_bandlists" parent="publication_used_bandlists" onclick="removeFields(event)"><i class="fa fa-trash" aria-hidden="true"></i> Used Bandlist</btn> 
+                                        </div>
+                                    </div>
+
+                                    {{ form.publication_x_comments|as_crispy_field }}
+
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <btn class="btn btn-success mx-auto addfields_button" parent="publication_sections" child="publication_section" onclick="addMajorSample(event)"><i class="fa fa-plus-circle" aria-hidden="true"></i> Publication</btn>
+                    <btn class="btn btn-danger mx-auto removefields_hover removefields_button" id="remove_publication_sections" parent="publication_sections" onclick="removeFields(event)"><i class="fa fa-trash" aria-hidden="true"></i> Publication</btn>
+                </div>
+
+                <button class="btn contact-btn m-4" data-toggle="modal" data-target="message"
+                    type="submit">Create XML file</button>
+
+            </form>
+        </div>
+    </div>
+</div>
+<div id="experimentalist_uid" style="display:none" data-autofill="{{ profile.experimentalist_uid }}"></div>
+<div id="laboratory_uid" style="display:none" data-autofill="{{ profile.laboratory_uid }}"></div>
+
+{% endblock %}
+
+{% block postloadjs %}
+    {{ block.super }}
+    <script>
+        // getting variables from the view
+        let uploaded_data = '{{ uploaded_data|safe }}';
+        let researcher = '{{ profile.experimentalist_uid }}';
+        let sessionArray = '{{session_json|safe}}';
+        let profile = '{{ profile|safe }}';
+
+        // getting the blocks that user can copy in the form
+        let originalPublicationSection = document.getElementById("publication_section");
+        let originalAuthor = document.getElementById("publication_author");
+        let originalKeyword = document.getElementById("publication_keyword");
+        let originalIdentifier = document.getElementById("publication_identifier");
+        let originalContent = document.getElementById("publication_content");
+        let originalCitedPublication = document.getElementById("publication_cited_publication");
+        let originalUsedExperiment = document.getElementById("publication_used_experiment");
+        let originalUsedBandlist = document.getElementById("publication_used_bandlist");
+
+        // cloning the original blocks which can be inserted, thus preserving the original content
+        const globalClones = [
+            originalPublicationSection.cloneNode(true),
+            originalAuthor.cloneNode(true),
+            originalKeyword.cloneNode(true),
+            originalIdentifier.cloneNode(true),
+            originalContent.cloneNode(true),
+            originalCitedPublication.cloneNode(true),
+            originalUsedExperiment.cloneNode(true),
+            originalUsedBandlist.cloneNode(true)
+        ];
+
+        // providing url for the ajax call
+        let ajaxURL = "/insert-publication/";
+    </script>
+    <script type="text/javascript" src="{% static 'frontend/js/add_form_fields.js' %}"></script>
+    <script type="text/javascript" src="{% static 'frontend/js/auto_fill.js' %}"></script>
+    <!-- <script type="text/javascript" src="{% static 'frontend/js/rebuild_from_session.js' %}"></script> -->
+    <!-- <script>
+        function publicationFunction() {
+            var publicationFullForm = document.getElementById("publicationFullForm");
+
+            check_boxes = ["introCheck", "authorCheck", "publicationCheck"]
+
+            form_names = ["form-intro", "form-author", "form-publication"]
+
+            if (publicationFullForm.checked) {
+                for(let i = 0; i < check_boxes.length; i++) {
+                    document.getElementById(form_names[i]).style.display = "block";
+                    document.getElementById(check_boxes[i]).disabled = true;
+                }
+            } else {
+                for(let i = 0; i < check_boxes.length; i++) {
+                    document.getElementById(check_boxes[i]).disabled = false;
+                    if (document.getElementById(check_boxes[i]).checked == true) {
+                        document.getElementById(form_names[i]).style.display = "block";
+                    } else {
+                        document.getElementById(form_names[i]).style.display = "none";
+                    }
+                }
+            }
+        }
+    </script> -->
+{% endblock %}

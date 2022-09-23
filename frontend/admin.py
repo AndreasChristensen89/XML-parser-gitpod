@@ -1,3 +1,6 @@
 from django.contrib import admin
+from .models import Samples, Publications
 
-# Register your models here.
+
+admin.site.register(Samples)
+admin.site.register(Publications)

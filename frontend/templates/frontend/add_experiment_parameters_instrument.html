@@ -1,0 +1,304 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block page_header %}
+<div class="container header-container">
+    <div class="container-header"></div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="col-10 py-5 pb-2 mx-auto text-center">
+            <h1 class="h1 mx-auto rounded contact-heading">
+                Parameters Instruments
+            </h1>
+        </div>
+    </div>
+
+    <div class="row text-center">
+        <ul class="list-group list-group-horizontal mx-auto">
+            <a class="list-group-item bg-success text-white" href="{% url 'frontend:add_experiment_intro' %}">Intro</a>
+            <a class="list-group-item bg-success text-white" href="{% url 'frontend:add_geolocation' %}">Geolocation</a>
+            <li class="list-group-item bg-primary text-white">Parameters Instrument</li>
+            <a class="list-group-item" href="{% url 'frontend:add_experiment_multiple_sections' %}">Multiple Sections</a>
+            <a class="list-group-item" href="{% url 'frontend:add_experiment_spectra' %}">Spectra</a>
+            <a class="list-group-item" href="{% url 'frontend:add_experiment_finish' %}">Finish</a>
+        </ul> 
+    </div>
+
+    <div class="row text-center my-5">
+        <div class="col mx-auto">
+            <a class="btn btn-danger" href="{% url 'frontend:delete_experiment_parameters_instrument' %}">Remove info</a>
+        </div>
+    </div>
+
+    <div class="row my-5">
+        <div class="col-10 mx-auto mt-3 mb-5 p-4 first-div border rounded">
+            <form method="post" id="form">
+                {% csrf_token %}
+
+                    <div id="parameter_instruments">
+                        <div id="parameter_instrument">
+                            <a class="btn btn-primary mx-3 mb-4" data-toggle="collapse" href="#collapseParametersInstrument"
+                                role="button" aria-expanded="false" aria-controls="collapseParametersInstrument">Parameters
+                                Instrument</a>
+                            <div class="collapse" id="collapseParametersInstrument">
+                                <div class="card card-body mb-3 border border-black">
+                                    {{ form.parameters_instrument_x_instrument_uid|as_crispy_field }}
+                                    {{ form.parameters_instrument_x_instrument_carrier|as_crispy_field }}
+                                    {{ form.parameters_instrument_x_instrument_sample_holder|as_crispy_field }}
+                                    {{ form.parameters_instrument_x_spectrum_scan_number|as_crispy_field }}
+                                    <p>
+                                        <a class="btn btn-danger mx-auto" data-toggle="collapse" href="#collapseSpectral"
+                                            role="button" aria-expanded="false"
+                                            aria-controls="collapseSpectral">Spectral</a>
+                                    </p>
+                                    <div class="collapse" id="collapseSpectral">
+                                        <div class="card card-body mb-3">
+                                            {{ form.spectral_x_unit|as_crispy_field }}
+                                            {{ form.spectral_x_standard|as_crispy_field }}
+                                            {{ form.spectral_x_observation_mode|as_crispy_field }}
+                                            <p>
+                                                <a class="btn btn-warning mx-auto" data-toggle="collapse"
+                                                    href="#collapseRangeTypes" role="button" aria-expanded="false"
+                                                    aria-controls="collapseRangeTypes">Range Types</a>
+                                            </p>
+                                            <div class="collapse" id="collapseRangeTypes">
+                                                <div class="card card-body mb-3">
+                                                    <div id="p_i_types_ranges">
+                                                        <div id="p_i_type_range">
+                                                            {{ form.range_types_x_type|as_crispy_field }}
+                                                        </div>
+                                                    </div>
+                                                    <btn class="col-6 btn btn-success mx-auto" parent="p_i_types_ranges" child="p_i_type_range" onclick="addFields(event)">Add Range Type</btn>
+                                                    <btn id="remove_p_i_types_ranges" class="col-3 btn btn-danger mx-auto my-2 removefields_button" parent="p_i_types_ranges" onclick="removeFields(event)">Remove Last Add</btn>
+                                                </div>
+                                            </div>
+                                            <p>
+                                                <a class="btn btn-warning mx-auto" data-toggle="collapse"
+                                                    href="#collapseRanges" role="button" aria-expanded="false"
+                                                    aria-controls="collapseRanges">Ranges</a>
+                                            </p>
+                                            <div class="collapse" id="collapseRanges">
+                                                <div class="card card-body mb-3">
+                                                    <div id="p_i_ranges">
+                                                        <div id="p_i_range">
+                                                            <div class="card card-body mb-3 border border-black">
+                                                                {{ form.range_x_min|as_crispy_field }}
+                                                                {{ form.range_x_max|as_crispy_field }}
+                                                                {{ form.range_x_absorption_edge_element_uid|as_crispy_field }}
+                                                                {{ form.range_x_absorption_edge_type|as_crispy_field }}
+                                                                {{ form.range_x_sampling|as_crispy_field }}
+                                                                {{ form.range_x_resolution|as_crispy_field }}
+                                                                {{ form.range_x_position_error|as_crispy_field }}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row my-3">
+                                                        <btn class="btn btn-success mx-auto addfields_button" parent="p_i_ranges" child="p_i_range" onclick="addFields(event)"><i class="fa fa-plus" aria-hidden="true"></i></btn>
+                                                        <btn class="btn btn-danger mx-auto removefields_hover removefields_button" id="remove_p_i_ranges" parent="p_i_ranges" onclick="removeFields(event)"><i class="fa fa-trash" aria-hidden="true"></i></btn>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            <p>
+                                                <a class="btn btn-warning mx-auto" data-toggle="collapse"
+                                                    href="#collapseFilters" role="button" aria-expanded="false"
+                                                    aria-controls="collapseFilters">Filters</a>
+                                            </p>
+                                            <div class="collapse" id="collapseFilters">
+                                                <div class="card card-body mb-3">
+                                                    <div id="p_i_filters">
+                                                        <div id="p_i_filter">
+                                                            <div class="card card-body mb-3 border border-black">
+                                                                {{ form.filter_x_type|as_crispy_field }}
+                                                                {{ form.filter_x_place|as_crispy_field }}
+                                                                {{ form.filter_x_center|as_crispy_field }}
+                                                                {{ form.filter_x_width|as_crispy_field }}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row my-3">
+                                                        <btn class="btn btn-success mx-auto addfields_button" parent="p_i_filters" child="p_i_filter" onclick="addFields(event)"><i class="fa fa-plus" aria-hidden="true"></i></btn>
+                                                        <btn class="btn btn-danger mx-auto removefields_hover removefields_button" id="remove_p_i_filters" parent="p_i_filters" onclick="removeFields(event)"><i class="fa fa-trash" aria-hidden="true"></i></btn>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {{ form.spectral_x_comments|as_crispy_field }}
+                                        </div>
+                                    </div>
+                                    <p>
+                                        <a class="btn btn-success mx-auto" data-toggle="collapse" href="#collapseAngle"
+                                            role="button" aria-expanded="false" aria-controls="collapseAngle">Angle</a>
+                                    </p>
+                                    <div class="collapse" id="collapseAngle">
+                                        <div class="card card-body mb-3">
+                                            {{ form.angle_x_observation_geometry|as_crispy_field }}
+                                            {{ form.angle_x_observation_mode|as_crispy_field }}
+                                            {{ form.angle_x_incidence|as_crispy_field }}
+                                            {{ form.angle_x_emergence|as_crispy_field }}
+                                            {{ form.angle_x_azimuth|as_crispy_field }}
+                                            {{ form.angle_x_phase|as_crispy_field }}
+                                            {{ form.angle_x_resolution_illumination|as_crispy_field }}
+                                            {{ form.angle_x_resolution_observation|as_crispy_field }}
+                                            {{ form.angle_x_comments|as_crispy_field }}
+                                        </div>
+                                    </div>
+    
+                                    <p>
+                                        <a class="btn btn-success mx-auto" data-toggle="collapse"
+                                            href="#collapsePolarization" role="button" aria-expanded="false"
+                                            aria-controls="collapsePolarization">Polarization</a>
+                                    </p>
+                                    <div class="collapse" id="collapsePolarization">
+                                        <div class="card card-body mb-3">
+                                            {{ form.polarization_x_type_illumination|as_crispy_field }}
+                                            {{ form.polarization_x_type_observation|as_crispy_field }}
+                                            {{ form.polarization_x_polarizer_illumination|as_crispy_field }}
+                                            {{ form.polarization_x_polarizer_observation|as_crispy_field }}
+                                            {{ form.polarization_x_rejection_illumination|as_crispy_field }}
+                                            {{ form.polarization_x_rejection_observation|as_crispy_field }}
+                                            {{ form.polarization_x_angle_illumination|as_crispy_field }}
+                                            {{ form.polarization_x_angle_observation|as_crispy_field }}
+                                            {{ form.polarization_x_comments|as_crispy_field }}
+                                        </div>
+                                    </div>
+    
+                                    <p>
+                                        <a class="btn btn-success mx-auto" data-toggle="collapse" href="#collapseSpatial"
+                                            role="button" aria-expanded="false" aria-controls="collapseSpatial">Spatial</a>
+                                    </p>
+                                    <div class="collapse" id="collapseSpatial">
+                                        <div class="card card-body mb-3">
+                                            {{ form.spatial_x_observation_mode|as_crispy_field }}
+                                            {{ form.spatial_x_unit|as_crispy_field }}
+                                            {{ form.spatial_x_objective|as_crispy_field }}
+                                            {{ form.spatial_x_spots_number|as_crispy_field }}
+                                            {{ form.spatial_x_sampling_x|as_crispy_field }}
+                                            {{ form.spatial_x_sampling_y|as_crispy_field }}
+                                            {{ form.spatial_x_measures_x|as_crispy_field }}
+                                            {{ form.spatial_x_measures_y|as_crispy_field }}
+                                            {{ form.spatial_x_extent_x|as_crispy_field }}
+                                            {{ form.spatial_x_extent_y|as_crispy_field }}
+    
+                                            <p>
+                                                <a class="btn btn-danger mx-auto" data-toggle="collapse"
+                                                    href="#collapseResolutions" role="button" aria-expanded="false"
+                                                    aria-controls="collapseResolutions">Resolutions</a>
+                                            </p>
+                                            <div class="collapse" id="collapseResolutions">
+                                                <div class="card card-body mb-3">
+                                                    <div id="p_i_resolutions">
+                                                        <div id="p_i_resolution">
+                                                            <div class="card card-body mb-3 border border-black">
+                                                                {{ form.resolution_x_width|as_crispy_field }}
+                                                                {{ form.resolution_x_width_error|as_crispy_field }}
+                                                                {{ form.resolution_x_position|as_crispy_field }}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row my-3">
+                                                        <btn class="btn btn-success mx-auto addfields_button" parent="p_i_resolutions" child="p_i_resolution" onclick="addFields(event)"><i class="fa fa-plus" aria-hidden="true"></i></btn>
+                                                        <btn class="btn btn-danger mx-auto removefields_hover removefields_button" id="remove_p_i_resolutions" parent="p_i_resolutions" onclick="removeFields(event)"><i class="fa fa-trash" aria-hidden="true"></i></btn>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            {{ form.spatial_x_comments|as_crispy_field }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row my-3">
+                        <btn class="btn btn-success mx-auto addfields_button" added="" parent="parameter_instruments" child="parameter_instrument" onclick="addSection(event)"><i class="fa fa-plus" aria-hidden="true"></i></btn>
+                        <btn class="btn btn-danger mx-auto removefields_hover removefields_button" id="remove_parameter_instruments" parent="parameter_instruments" onclick="removeFields(event)"><i class="fa fa-trash" aria-hidden="true"></i></btn>
+                    </div>
+                    
+                    {% if done %}
+                        <input class="my-2" type="submit" value="Update section"/>
+                    {% else %}
+                        <input class="my-2" type="submit" value="Attach Intro to file"/>
+                    {% endif %}
+                
+            </form>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block postloadjs %}
+    {{ block.super }}
+<script>
+    var uploaded_data = '{{ uploaded_data|safe }}';
+    var researcher = '{{ profile.experimentalist_uid }}';
+    var sessionArray = '{{session_json|safe}}';
+
+    let originalRangeType = document.getElementById("p_i_type_range");
+    let originalParameterInstrument = document.getElementById("parameter_instrument");
+    let originalRange = document.getElementById("p_i_range");
+    let originalFilter = document.getElementById("p_i_filter");
+    let originalResolution = document.getElementById("p_i_resolution");
+
+    const globalClones = [
+        originalRange.cloneNode(true),
+        originalFilter.cloneNode(true),
+        originalResolution.cloneNode(true),
+        originalRangeType.cloneNode(true),
+        originalParameterInstrument.cloneNode(true)
+        ];
+    
+    let ajaxURL = "/add-experiment-parameters-instrument/";
+</script>
+<script type="text/javascript" src="{% static 'frontend/js/add_form_fields.js' %}"></script>    
+<!-- <script>
+     if (rebuild === "None") {
+        $("[name=range_type_count]").val(rangeTypeRepeat);
+        $("[name=range_count]").val(rangeRepeat);
+        $("[name=filter_count]").val(filterRepeat);
+        $("[name=resolution_parameters_type_count]").val(resolutionRepeat);
+     } else {
+        $("[name=range_type_count]").val(rebuild[2]);
+        $("[name=range_count]").val(rebuild[7]);
+        $("[name=filter_count]").val(rebuild[12]);
+        $("[name=resolution_parameters_type_count]").val(rebuild[17]);
+    }
+    var rangeTypeCount = Number($("[name=range_type_count]").val());
+    var rangeCount = Number($("[name=range_count]").val());
+    var filterCount = Number($("[name=filter_count]").val());
+    var resolutionParametersTypeCount = Number($("[name=resolution_parameters_type_count]").val());
+
+    $("[name=submit]").val("submit");
+    let submit = $("[name=submit]").val();
+    // get extra form count so we know what index to use for the next item.
+
+    $("#add-range-type").click(function () {
+        rangeTypeCount++;
+        // increment form count so our view knows to populate 
+        // that many fields for validation
+        $("[name=range_type_count]").val(rangeTypeCount);
+        $("[name=submit]").val("false");
+    })
+    $("#add-range").click(function () {
+        rangeCount++;
+        $("[name=range_count]").val(rangeCount);
+        $("[name=submit]").val("false");
+    })
+    $("#add-filter").click(function () {
+        filterCount++;
+        $("[name=filter_count]").val(filterCount);
+        $("[name=submit]").val("false");
+    })
+    $("#add-resolution-parameters").click(function () {
+        resolutionParametersTypeCount++;
+        $("[name=resolution_parameters_type_count]").val(resolutionParametersTypeCount);
+        $("[name=submit]").val("false");
+    })
+</script> -->
+{% endblock %}

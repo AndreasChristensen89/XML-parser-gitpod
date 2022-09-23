@@ -1,0 +1,202 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block page_header %}
+<div class="container header-container">
+    <div class="container-header"></div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="col-10 py-5 pb-2 mx-auto text-center">
+            <h1 class="h1 mx-auto rounded contact-heading">
+                Multiple Sections
+            </h1>
+        </div>
+    </div>
+
+    <div class="row text-center">
+        <ul class="list-group list-group-horizontal mx-auto">
+            <a class="list-group-item bg-success text-white" href="{% url 'frontend:add_experiment_intro' %}">Intro</a>
+            <a class="list-group-item bg-success text-white" href="{% url 'frontend:add_geolocation' %}">Geolocation</a>
+            <a class="list-group-item bg-success text-white" href="{% url 'frontend:add_parameters_instrument' %}">Parameters Instruments</a>
+            <li class="list-group-item bg-primary text-white">Multiple Sections</li>
+            <a class="list-group-item" href="{% url 'frontend:add_experiment_spectra' %}">Spectra</a>
+            <a class="list-group-item" href="{% url 'frontend:add_experiment_finish' %}">Finish</a>
+        </ul> 
+    </div>
+
+    <div class="row text-center my-5">
+        <div class="col mx-auto">
+            <a class="btn btn-danger" href="{% url 'frontend:delete_experiment_multiple_sections' %}">Remove info</a>
+        </div>
+    </div>
+
+    <div class="row my-5">
+        <div class="col-10 mx-auto mt-3 mb-5 p-4 first-div border rounded">
+            <form method="post" id="form">
+                {% csrf_token %}
+
+                <p class="lead">Experiment Comments</p>
+                {{ form.experiment_x_comments|as_crispy_field }}
+
+                <p class="lead">Preview</p>
+                <div class="card card-body mb-3 border border-black">
+                    {{ form.preview_x_x|as_crispy_field }}
+                    {{ form.preview_x_y|as_crispy_field }}
+                    {{ form.preview_x_y2|as_crispy_field }}
+                    {{ form.preview_x_filename|as_crispy_field }}  
+                </div>
+                
+                <p class="lead">Images</p>
+                <div id="images">
+                    <div id="image">
+                        <div class="card card-body mb-3 border border-black">
+                        {{ form.image_x_filename|as_crispy_field }}
+                        {{ form.image_x_caption|as_crispy_field }}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <btn class="col-6 btn btn-success mx-auto" parent="images" child="image" onclick="addFields(event)">Add Image</btn>
+                </div>
+
+                <div class="row">
+                    <btn id="remove_images" class="col-3 btn btn-danger mx-auto my-2 removefields_button" parent="images" onclick="removeFields(event)">Remove Last Add</btn>
+                </div>
+                
+                    
+                <p class="lead">Documentation</p>
+                <div id="documentations">
+                    <div id="documentation">
+                        <div class="card card-body mb-3 border border-black">
+                            {{ form.documentation_x_name|as_crispy_field }}
+                            {{ form.documentation_x_filename|as_crispy_field }}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <btn class="col-6 btn btn-success mx-auto" parent="documentations" child="documentation" onclick="addFields(event)">Add Documentation</btn>
+                </div>
+                <div class="row">
+                    <btn id="remove_documentations" class="col-3 btn btn-danger mx-auto my-2 removefields_button" parent="documentations" onclick="removeFields(event)">Remove Last Add</btn>
+                </div>
+
+                <p class="lead">Publications</p>
+                <div id="publication_uids">
+                    <div id="publication_uid">
+                        <div class="card card-body mb-3">
+                                {{ form.publications_x_publication_uid|as_crispy_field }}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <btn class="col-6 btn btn-success mx-auto" parent="publication_uids" child="publication_uid" onclick="addFields(event)">Add Publication</btn>
+                </div>
+                <div class="row">
+                    <btn id="remove_publication_uids" class="col-3 btn btn-danger mx-auto my-2 removefields_button" parent="publication_uids" onclick="removeFields(event)">Remove Last Add</btn>
+                </div>
+                
+                {{ form.experiment_x_publication_comments|as_crispy_field }}
+
+                <p class="lead">Sponsors</p>
+                <div id="sponsors">
+                    <div id="sponsor">
+                        <div class="card card-body mb-3 border border-black">
+                            {{ form.sponsor_x_acronym|as_crispy_field }}
+                            {{ form.sponsor_x_name|as_crispy_field }}
+                            {{ form.sponsor_x_award|as_crispy_field }}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <btn class="col-6 btn btn-success mx-auto" parent="sponsors" child="sponsor" onclick="addFields(event)">Add Documentation</btn>
+                </div>
+                <div class="row">
+                    <btn id="remove_sponsors" class="col-3 btn btn-danger mx-auto my-2 removefields_button" parent="sponsors" onclick="removeFields(event)">Remove Last Add</btn>
+                </div>
+                
+                {% if done %}
+                    <input class="my-2" type="submit" value="Update section"/>
+                {% else %}
+                    <input class="my-2" type="submit" value="Attach Intro to file"/>
+                {% endif %}
+                
+            </form>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block postloadjs %}
+    {{ block.super }}
+<script>
+    var uploaded_data = '{{ uploaded_data|safe }}';
+    var researcher = '{{ profile.experimentalist_uid }}';
+    var sessionArray = '{{session_json|safe}}';
+
+    let originalImage = document.getElementById("image");
+    let originalDocumentation = document.getElementById("documentation");
+    let originalSponsor = document.getElementById("sponsor");
+    let originalPublicationUID = document.getElementById("publication_uid");
+
+
+    const globalClones = [
+        originalImage.cloneNode(true),
+        originalDocumentation.cloneNode(true),
+        originalSponsor.cloneNode(true),
+        originalPublicationUID.cloneNode(true)
+        ];
+
+        let ajaxURL = "/add-experiment-multiple-sections/";
+</script>
+<script type="text/javascript" src="{% static 'frontend/js/add_form_fields.js' %}"></script> 
+<!-- <script>
+     if (rebuild === "None") {
+        $("[name=range_type_count]").val(rangeTypeRepeat);
+        $("[name=range_count]").val(rangeRepeat);
+        $("[name=filter_count]").val(filterRepeat);
+        $("[name=resolution_parameters_type_count]").val(resolutionRepeat);
+     } else {
+        $("[name=range_type_count]").val(rebuild[2]);
+        $("[name=range_count]").val(rebuild[7]);
+        $("[name=filter_count]").val(rebuild[12]);
+        $("[name=resolution_parameters_type_count]").val(rebuild[17]);
+    }
+    var rangeTypeCount = Number($("[name=range_type_count]").val());
+    var rangeCount = Number($("[name=range_count]").val());
+    var filterCount = Number($("[name=filter_count]").val());
+    var resolutionParametersTypeCount = Number($("[name=resolution_parameters_type_count]").val());
+
+    $("[name=submit]").val("submit");
+    let submit = $("[name=submit]").val();
+    // get extra form count so we know what index to use for the next item.
+
+    $("#add-range-type").click(function () {
+        rangeTypeCount++;
+        // increment form count so our view knows to populate 
+        // that many fields for validation
+        $("[name=range_type_count]").val(rangeTypeCount);
+        $("[name=submit]").val("false");
+    })
+    $("#add-range").click(function () {
+        rangeCount++;
+        $("[name=range_count]").val(rangeCount);
+        $("[name=submit]").val("false");
+    })
+    $("#add-filter").click(function () {
+        filterCount++;
+        $("[name=filter_count]").val(filterCount);
+        $("[name=submit]").val("false");
+    })
+    $("#add-resolution-parameters").click(function () {
+        resolutionParametersTypeCount++;
+        $("[name=resolution_parameters_type_count]").val(resolutionParametersTypeCount);
+        $("[name=submit]").val("false");
+    })
+</script> -->
+{% endblock %}

@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block page_header %}
+<div class="container header-container">
+    <div class="container-header"></div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+
+        <div class="col-10 py-5 pb-2 mx-auto text-center">
+            <h1 class="h1 mx-auto rounded contact-heading">
+                Add Geolocation
+            </h1>
+        </div>
+    </div>
+
+    <div class="row text-center">
+        <ul class="list-group list-group-horizontal mx-auto">
+            <a class="list-group-item bg-success text-white" href="{% url 'frontend:add_experiment_intro' %}">Intro</a>
+            <li class="list-group-item bg-primary text-white" href="{% url 'frontend:add_geolocation' %}">Geolocation</li>
+            <a class="list-group-item" href="{% url 'frontend:add_parameters_instrument' %}">Parameters Instrument</a>
+            <a class="list-group-item" href="{% url 'frontend:add_experiment_multiple_sections' %}">Multiple Sections</a>
+            <a class="list-group-item" href="{% url 'frontend:add_experiment_spectra' %}">Spectra</a>
+            <a class="list-group-item" href="{% url 'frontend:add_experiment_finish' %}">Finish</a>
+        </ul> 
+    </div>
+
+    <!-- <div class="row text-center my-5">
+        <div class="col mx-auto">
+            <a class="btn btn-danger" href="{% url 'frontend:upload_sample' %}">Upload Sample</a>
+        </div>
+    </div> -->
+
+    <div class="row">
+        <div class="col-10 mx-auto mt-3 mb-5 p-4 first-div border rounded">
+            <form method="post" id="form">
+                {% csrf_token %}
+                {{ form.body_x_uid|as_crispy_field }}
+                {{ form.body_x_coordinate_system|as_crispy_field }}
+                <div id="geolocations">
+                    <div id="geolocation">
+                        <a class="btn btn-primary mx-3 mb-4" data-toggle="collapse" href="#collapseGeolocation" role="button"
+                            aria-expanded="false" aria-controls="collapseGeolocation">Geolocation</a>
+                        <div class="collapse" id="collapseGeolocation">
+                        <div class="card card-body mb-3 border border-black">
+                            {{ form.geolocation_x_place|as_crispy_field }}
+                            {{ form.geolocation_x_region|as_crispy_field }}
+                            {{ form.geolocation_x_country_code|as_crispy_field }}
+                            {{ form.geolocation_x_type|as_crispy_field }}
+                            <p class="lead">Coordinates</p>
+                            <div class="card card-body mb-3">
+                                <p>Coordinate</p>
+                                <div id="coordinates">
+                                    <div id="coordinate">
+                                        <div class="card card-body mb-3 border border-black">
+                                            {{ form.coordinate_x_latitude|as_crispy_field }}
+                                            {{ form.coordinate_x_longitude|as_crispy_field }}
+                                            {{ form.coordinate_x_altitude|as_crispy_field }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row my-3">
+                                    <btn class="btn btn-success mx-auto addfields_button" parent="coordinates" child="coordinate" onclick="addFields(event)"><i class="fa fa-plus" aria-hidden="true"></i></btn>
+                                    <btn class="btn btn-danger mx-auto removefields_hover removefields_button" id="remove_coordinates" parent="coordinates" onclick="removeFields(event)"><i class="fa fa-trash" aria-hidden="true"></i></btn>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
+                <div class="row my-3">
+                    <btn class="btn btn-success mx-auto addfields_button" parent="geolocations" child="geolocation" onclick="addFields(event)"><i class="fa fa-plus" aria-hidden="true"></i></btn>
+                    <btn class="btn btn-danger mx-auto removefields_hover removefields_button" id="remove_geolocations" parent="geolocations" onclick="removeFields(event)"><i class="fa fa-trash" aria-hidden="true"></i></btn>
+                </div>
+                
+                {% if done %}
+                <input class="my-2" type="submit" value="Update section"/>
+                {% else %}
+                <input class="my-2" type="submit" value="Attach Intro to file"/>
+                {% endif %}
+                
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block postloadjs %}
+    {{ block.super }}
+<script>
+    var uploaded_data = '{{ uploaded_data|safe }}';
+    var researcher = '{{ profile.experimentalist_uid }}';
+    var sessionArray = '{{session_json|safe}}';
+
+    let originalGeolocation = document.getElementById("geolocation");
+    let originalCoordinate = document.getElementById("coordinate");
+
+    const globalClones = [
+    originalGeolocation.cloneNode(true),
+    originalCoordinate.cloneNode(true)
+    ];
+
+    let ajaxURL = "/add-experiment-geolocation/";
+</script>
+<script type="text/javascript" src="{% static 'frontend/js/add_form_fields.js' %}"></script>  
+{% endblock %}
