@@ -523,11 +523,11 @@ def generateXMLSample(fileName, text_info):
                             continue
 
     # clean up naming - works!
-    # names_to_remove = ["_0", "_1", "_2", "_3", "_4", "_5", "_6", "_7", "_added", "_inner", "_zer", "_one", "_two", "_thr", "_fou"]
-    # for element in root.iter():
-    #     for name in names_to_remove:
-    #         if name in element.tag:
-    #             element.tag = element.tag.replace(name, "")
+    names_to_remove = ["_0", "_1", "_2", "_3", "_4", "_5", "_6", "_7", "_added", "_inner", "_zer", "_one", "_two", "_thr", "_fou"]
+    for element in root.iter():
+        for name in names_to_remove:
+            if name in element.tag:
+                element.tag = element.tag.replace(name, "")
 
 
     # preparing file, adding indent

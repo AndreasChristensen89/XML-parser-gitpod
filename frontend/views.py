@@ -65,13 +65,10 @@ def insert_sample(request):
                         array.append(form.cleaned_data[field.name])
                     values.append(array)
 
-                    # try:
-                    #     Samples.objects.get(sample_uid=array[2])
-                    # if array[0] == "sample" and array[1] == "uid":
-                    #     if not Samples.objects.get(sample_uid=array[2]):
-                    #         Samples.objects.create(sample_uid=array[2])
-                    #     else:
-                    #         Samples.objects.get(sample_uid=array[2])
+                    if array[0] == "sample" and array[1] == "uid":
+                        print(Samples.objects.all())
+                        # if not Samples.objects.get(sample_uid=array[2]).exists():
+                        #     Samples.objects.create(sample_uid=array[2])
                     #if array[0] == "sample" and array[1] == "name":
 
                 # keys and values are inserted in dict
