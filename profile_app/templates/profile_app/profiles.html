@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block page_header %}
+    <div class="container header-container">
+        <div class="container-header"></div>
+    </div>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row position-relative">
+        <div class="col-12 pt-5 text-center title-height">
+            <h2 class="h2 p-3 centered border rouded" id="profile-heading">PROFILE</h2>
+        </div>
+        <hr>
+    </div>
+
+
+
+    <div class="row">
+        <div class="col-10 py-5 pb-2 mx-auto text-center">
+            <h2 class="h2 mx-auto">Welcome to your profile, {{ profile.user }}</h2>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-10 py-5 pb-2 mx-auto text-center">
+            <a class="h2 border border-black mx-auto p-2" href="{% url 'profile_app:update_profile' profile.id %}">Update Profile info</a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-10 py-5 pb-2 mx-auto text-center">
+            <a class="h2 border border-black mx-auto p-2" href="{% url 'profile_app:update_user' %}">Update user info</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

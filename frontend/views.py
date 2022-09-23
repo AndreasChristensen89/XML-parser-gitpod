@@ -1,9 +1,8 @@
 from dataclasses import asdict
 import json
-from profiles.models import Profile
+from profile_app.models import Profile
 from .functions import handle_uploaded_experiment_file, handle_uploaded_publication_file, handle_uploaded_file, handle_bibtex
 from django.shortcuts import render, redirect, get_object_or_404
-from profiles.models import Profile
 from .models import Samples, Publications
 from .forms import ContactForm, InsertSampleForm, InsertPublicationForm, UploadFileForm
 from .forms import ExperimentGeolocation, ExperimentMultipleSections, ExperimentIntro, ExperimentParameterInstrument
@@ -12,7 +11,7 @@ from django.contrib import messages
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
-from xml_parser.xlm_parsers import generateXMLPublication, generateXMLSample, generateXMLExperiment
+from xml_parser.xml_parsers import generateXMLPublication, generateXMLSample, generateXMLExperiment
 from django.http.response import JsonResponse
 
 
@@ -66,11 +65,13 @@ def insert_sample(request):
                         array.append(form.cleaned_data[field.name])
                     values.append(array)
 
-                    if array[0] == "sample" and array[1] == "uid":
-                        if not Samples.objects.get(sample_uid=array[2]):
-                            Samples.objects.create(sample_uid=array[2])
-                        else:
-                            Samples.objects.get(sample_uid=array[2])
+                    # try:
+                    #     Samples.objects.get(sample_uid=array[2])
+                    # if array[0] == "sample" and array[1] == "uid":
+                    #     if not Samples.objects.get(sample_uid=array[2]):
+                    #         Samples.objects.create(sample_uid=array[2])
+                    #     else:
+                    #         Samples.objects.get(sample_uid=array[2])
                     #if array[0] == "sample" and array[1] == "name":
 
                 # keys and values are inserted in dict

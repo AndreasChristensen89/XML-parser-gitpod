@@ -32,6 +32,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+CSRF_TRUSTED_ORIGINS = ['https://8000-andreaschri-xmlparsergi-bm2d40yt9bg.ws-eu67.gitpod.io']
 
 # Application definition
 
@@ -63,31 +64,31 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    #'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
-INTERNAL_IPS = [
-    "127.0.0.1",
-]
+# INTERNAL_IPS = [
+#     "127.0.0.1",
+# ]
 
-if DEBUG:
-    import socket  # only if you haven't already imported this
-    hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
-    INTERNAL_IPS = [ip[: ip.rfind(".")] + ".1" for ip in ips] + ["127.0.0.1", "10.0.2.2"]
-
-
-def show_toolbar(request):
-    return DEBUG
+# if DEBUG:
+#     import socket  # only if you haven't already imported this
+#     hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
+#     INTERNAL_IPS = [ip[: ip.rfind(".")] + ".1" for ip in ips] + ["127.0.0.1", "10.0.2.2"]
 
 
-DEBUG_TOOLBAR_CONFIG = {
-    # Toolbar options
-    'RESULTS_CACHE_SIZE': 3,
-    'SHOW_COLLAPSED': True,
-    # Panel options
-    'SQL_WARNING_THRESHOLD': 100,   # milliseconds
-    "SHOW_TOOLBAR_CALLBACK": show_toolbar,
-}
+# def show_toolbar(request):
+#     return DEBUG
+
+
+# DEBUG_TOOLBAR_CONFIG = {
+#     # Toolbar options
+#     'RESULTS_CACHE_SIZE': 3,
+#     'SHOW_COLLAPSED': True,
+#     # Panel options
+#     'SQL_WARNING_THRESHOLD': 100,   # milliseconds
+#     "SHOW_TOOLBAR_CALLBACK": show_toolbar,
+# }
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
